@@ -43,5 +43,17 @@ Start:
 
 	WaitVBlank
 
+	ld b, (17/2) - 1
+	ld c, (20/2) - (8/2)
+	ld de, _SCRN1
+	ld hl, GameBoyStr
+	call PrintTilesAt
+
+	ld b, (17/2)
+	ld c, (20/2) - (17/2)
+	ld de, _SCRN1
+	ld hl, BoilerPlateProjectStr
+	call PrintTilesAt ; Print Gameboy boiler plate project centered horizontally and vertically
+
 	call DMAInstall    ;Install DMA to HRAM (also initiates first run)
 	jp GameLoop
