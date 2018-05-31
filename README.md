@@ -22,8 +22,8 @@ you want, it's your project after all - I just provide the boiler plate stuff.
 I'm not the best developer in the world, not by a longshot lol, so I 
 welcome any contributions and hope this can really be expanded by others into
 a more unified and larger project with a lot of collaboration and ideas from
-others especially ^_^. Regardless just fork, make changes, and send 
-a pull request if your interested or have something quick to add.
+others especially ^_^. If your interested or have something quick you want 
+to add feel free to contribute. Just fork, make changes, and send a pull request.
 
 ### What is this for?
 
