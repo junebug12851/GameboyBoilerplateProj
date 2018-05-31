@@ -41,10 +41,8 @@ Start:
 	ld  a,LCDCF_BGON | LCDCF_OBJON | LCDCF_BG8000 | LCDCF_BG9C00 | LCDCF_WIN9C00 | LCDCF_ON
 	ldh [rLCDC],a
 
-	WaitVBlank
-
 	ld b, (17/2) - 1
-	ld c, (20/2) - (8/2)
+	ld c, (20/2) - (17/2)
 	ld de, _SCRN1
 	ld hl, GameBoyStr
 	call PrintTilesAt
@@ -54,6 +52,12 @@ Start:
 	ld de, _SCRN1
 	ld hl, BoilerPlateProjectStr
 	call PrintTilesAt ; Print Gameboy boiler plate project centered horizontally and vertically
+
+	ld b, (17/2) + 2
+	ld c, (20/2) - (17/2)
+	ld de, _SCRN1
+	ld hl, EmoticonStr
+	call PrintTilesAt
 
 	call DMAInstall    ;Install DMA to HRAM (also initiates first run)
 	jp GameLoop
