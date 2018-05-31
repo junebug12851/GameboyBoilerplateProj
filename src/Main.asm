@@ -23,6 +23,7 @@ include "./src/Fixed/Header.asm"
 ; Various utilities and such
 include "./src/Home/LCD.asm"
 include "./src/Home/Data.asm"
+include "./src/home/RSTHandlers.asm"
 
 ; ROM Starting Point and Game Loop
 include "./src/Home/Start.asm"
