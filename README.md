@@ -1,5 +1,4 @@
-##Gameboy Boilerplate Project
-
+## Gameboy Boilerplate Project
 There are a million ways to program for the Gameboy, here I provide
 a starter project or a kind of very simple API/Framework that I like
 which you can use in Assembly based Gameboy Programming to get you off 
@@ -70,6 +69,7 @@ did draw them. The symbols and ascii art was entirely done from scratch.
 ### Optimizations and Some extra features
 
 **1st Byte of bank indicates bank number**
+
 A single byte is placed at the start of each rom and external ram bank
 that indicates the bank number. While this seems simple or redundant
 it skips the need to track which bank your on in memory and it's relatively
