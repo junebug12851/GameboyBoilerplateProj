@@ -1,3 +1,5 @@
+![Project Thumbnail](https://i.imgur.com/xoi1xFj.png)
+
 ## Gameboy Boilerplate Project
 There are a million ways to program for the Gameboy, here I provide
 a boilerplate assembly project that I like which is commented and 
