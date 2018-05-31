@@ -94,4 +94,10 @@ work around that in compatibility or "upgrade" the save file while preserving
 the save data. Basically a modern touch option on the old classic that can
 totally be ignored or removed with ease.
 
+## How do I compile? What do I need?
+
+All your answers are in the COMPILE.md file from what to install, how and where 
+to get it, to compiling. The super short version though is use `rgbds` and run
+`./scripts/build.sh` any more elaboration can all be found in the seperate file.
+
 ## Enjoy ^_^
