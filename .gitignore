@@ -1,0 +1,11 @@
+.vscode/*
+notes/*
+scripts/run.sh
+scripts/buildRun.sh
+*.gb
+*.map
+*.obj
+*.rtc
+*.sav
+*.sym
+*.gbr
