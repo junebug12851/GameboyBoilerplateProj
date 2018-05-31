@@ -17,9 +17,13 @@ a good range of stuff well so you can just jump right in. Of course as a
 starter project your more than welcome to dive in and make whatever changes 
 you want, it's your project after all - I just provide the boiler plate stuff.
 
+### Contributions Welcome and Encouraged
+
 I'm not the best developer in the world, not by a longshot lol, so I 
-welcome any contributions. Just fork, make changes, and send a pull 
-request.
+welcome any contributions and hope this can really be expanded by others into
+a more unified and larger project with a lot of collaboration and ideas from
+others especially ^_^. Regardless just fork, make changes, and send 
+a pull request if your interested or have something quick to add.
 
 ### What is this for?
 
