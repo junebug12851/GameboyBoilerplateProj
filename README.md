@@ -1,4 +1,4 @@
-![Project Thumbnail](https://i.imgur.com/xoi1xFj.png)
+![Project Thumbnail](https://i.imgur.com/uepjEGa.png)
 
 ## Gameboy Boilerplate Project
 There are a million ways to program for the Gameboy, here I provide

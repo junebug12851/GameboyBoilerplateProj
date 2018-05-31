@@ -42,19 +42,19 @@ Start:
 	ldh [rLCDC],a
 
 	ld b, (17/2) - 1
-	ld c, (20/2) - (17/2)
+	ld c, (20/2) - (16/2)
 	ld de, _SCRN1
 	ld hl, GameBoyStr
 	call PrintTilesAt
 
 	ld b, (17/2)
-	ld c, (20/2) - (17/2)
+	ld c, (20/2) - (16/2)
 	ld de, _SCRN1
 	ld hl, BoilerPlateProjectStr
 	call PrintTilesAt ; Print Gameboy boiler plate project centered horizontally and vertically
 
 	ld b, (17/2) + 2
-	ld c, (20/2) - (17/2)
+	ld c, (20/2) - (16/2)
 	ld de, _SCRN1
 	ld hl, EmoticonStr
 	call PrintTilesAt
