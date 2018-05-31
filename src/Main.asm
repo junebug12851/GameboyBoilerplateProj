@@ -7,6 +7,8 @@ include "./src/Structure/HRAM.asm"
 include "./src/Structure/SRAM.asm"
 include "./src/Structure/ROM.asm"
 
+include "./src/Home/LCD.asm"
+
 ; Engines
 include "./src/Engine/Graphics.asm"
 include "./src/Engine/MBC.asm"
@@ -21,7 +23,6 @@ include "./src/Fixed/Entry.asm"
 include "./src/Fixed/Header.asm"
 
 ; Various utilities and such
-include "./src/Home/LCD.asm"
 include "./src/Home/Data.asm"
 include "./src/home/RSTHandlers.asm"
 
