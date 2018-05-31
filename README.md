@@ -1,18 +1,21 @@
 ## Gameboy Boilerplate Project
 There are a million ways to program for the Gameboy, here I provide
-a starter project or a kind of very simple API/Framework that I like
-which you can use in Assembly based Gameboy Programming to get you off 
-the ground. I also include a tileset I made which includes English upper and
-lower case letters, numbers, and several symbols including 2 or 3 ascii
-art characters.
+a boilerplate assembly project that I like which is commented and 
+documented throughout to get you off the ground. I also include a 
+tileset I made which includes English upper and lower case letters, 
+numbers, and several symbols including 2 or 3 ascii art characters.
 
-There have been lots of starter stuff I've seen but I always wanted to
-see one that had more to it so I began making my own mainly out of fun
-because I enjoy the gameboy and gameboy dev so much. My goal is to really 
-make this advanced or at least comprehensive and cover a good range of
-stuff well so you can just jump right in. Of course as a starter project
-your more than welcome to dive in and make whatever changes you want,
-it's your project after all - I just provide the boiler plate stuff.
+There have been lots of starter stuff I've seen but many were poorly 
+documented, often very incomplete and very basic to the point where it's
+not even useable in a real game and would all have to be scrapped. I always 
+wanted to see one that had more to it especially in terms of realism in a 
+real project so I began making my own while having a lot of fun and enjoying 
+game dev-ing on the Gameboy.
+
+My goal is to really make this advanced or at least comprehensive and cover 
+a good range of stuff well so you can just jump right in. Of course as a 
+starter project your more than welcome to dive in and make whatever changes 
+you want, it's your project after all - I just provide the boiler plate stuff.
 
 I'm not the best developer in the world, not by a longshot lol, so I 
 welcome any contributions. Just fork, make changes, and send a pull 
