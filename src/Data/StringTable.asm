@@ -1,13 +1,15 @@
+include "./src/Setup/Charmap.inc"
+
 section "StringTable", rom0
 
-HelloWorldStr:
+HelloWorldStr::
 	db "Hello World! ^_^;", $ff
 
-GameBoyStr:
+GameBoyStr::
 	db "▓▒░ Game Boy ░▒▓", $ff
 
-BoilerPlateProjectStr:
+BoilerPlateProjectStr::
 	db "Boilerplate Proj", $ff
 
-EmoticonStr:
-	db "     (^.^)       ", $ff
+EmoticonStr::
+	db "     (^.^)      ", $ff

@@ -1,6 +1,6 @@
 section "MemoryMngmt", rom0
 
-WipeMemory:
+WipeMemory::
 	ld de, $8000 ; Start of VRAM
 	ld bc, $A000 - $8000 ; All through VRAM
 	ld a, 0

@@ -1,5 +1,7 @@
+include "./src/Setup/Hardware.inc"
+
 section "DMA", rom0
-DMAInstall:
+DMAInstall::
 	ld  hl,RawDMACopyFunc
 	ld  de,hDMACopyFunc ;DMA routine, gets placed in HRAM
 	ld  bc,RawDMACopyFuncEnd-RawDMACopyFunc

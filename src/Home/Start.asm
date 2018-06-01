@@ -1,6 +1,9 @@
+include "./src/Engine/MBC.inc"
+include "./src/Setup/Hardware.inc"
+
 section "Start", rom0
 
-Start:
+Start::
 
 	ei				 ;enable interrupts
 	ld  sp,$FFFE	 ; Set stack pointer to FFFE

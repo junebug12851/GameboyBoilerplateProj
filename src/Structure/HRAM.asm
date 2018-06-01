@@ -1,9 +1,9 @@
-section "DMACopyFunc", hram
+section "HRAM", hram
 
 ; HRAM is 126 Bytes
 
-hDMACopyFunc:
+hDMACopyFunc::
     ds 15 ;??
 
-hCPUStack:
+hCPUStack::
     ds 111 ;??

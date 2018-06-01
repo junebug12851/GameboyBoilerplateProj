@@ -1,5 +1,7 @@
+include "./src/Home/LCD.inc"
+
 section "GameLoop", rom0
-GameLoop:
+GameLoop::
 	WaitVBlank
 	call ReadJoypad
 	call hDMACopyFunc

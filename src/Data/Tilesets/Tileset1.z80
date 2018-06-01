@@ -22,10 +22,10 @@
 
 section "Tileset1", rom0
 
-Tileset1Count:
+Tileset1Count::
 db 99
 
-Tileset1:
+Tileset1::
 db $00,$00,$00,$00,$00,$00,$00,$00
 db $00,$00,$00,$00,$00,$00,$00,$00
 db $00,$00,$3C,$3C,$46,$46,$46,$46
@@ -224,5 +224,5 @@ db $55,$55,$FF,$FF,$55,$55,$FF,$FF
 db $55,$55,$FF,$FF,$55,$55,$FF,$FF
 db $00,$00,$00,$00,$00,$00,$00,$00
 db $00,$00,$00,$00,$00,$00,$00,$00
-Tileset1End:
+Tileset1End::
 ; End of TILESET1.Z80

@@ -1,6 +1,6 @@
 section "Data", rom0
 
-CopyData:
+CopyData::
 ; Copy bc bytes from hl to de.
 	ld a, [hli]
 	ld [de], a
@@ -11,7 +11,7 @@ CopyData:
 	jr nz, CopyData
 	ret
 
-FillData:
+FillData::
 ; Fills bc bytes at de with a value
 	ld [de], a
 	inc de
@@ -27,7 +27,7 @@ FillData:
 	jr nz, FillData
 	ret
 
-VerifyData:
+VerifyData::
 	; Verify Bytes matchup from HL to DE for BC bytes or stops immidiately
 	; Returns a=0 if didn't verify and a=1 if did verify
 

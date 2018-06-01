@@ -1,15 +1,15 @@
 section "InterruptHandlers", rom0
-VBlank:
+VBlank::
 	reti
 
-HBlank:
+HBlank::
 	reti
 
-Timer:
+Timer::
 	reti
 
-Serial:
+Serial::
 	reti
 	
-Joypad:
+Joypad::
     reti

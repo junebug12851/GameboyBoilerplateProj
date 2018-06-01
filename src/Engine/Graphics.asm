@@ -1,10 +1,12 @@
+include "./src/Home/LCD.inc"
+
 section "graphics", rom0
 
 ; Given Y and X Coordinates, and a base address, adds offset to it
 ; B - Y coordinate between 0-31
 ; C - X coordinate between 0-31
 ; DE - Base Destination
-CoordToAddr:
+CoordToAddr::
     push af
     push hl ; Prevent destruction of these registers, back them up
 
@@ -41,7 +43,7 @@ CoordToAddr:
 ret
 
 ; Prints Tile A to DE and increment so it can be used consecutively
-PrintTile:
+PrintTile::
     ld b, a
     WaitVBlank
     ld a, b ; Backup a and check for VBlank then restore a
@@ -51,13 +53,13 @@ PrintTile:
     ret
 
 ; Print Tile A to Y,X Coords at BC and Base address at DE
-PrintTileAt:
+PrintTileAt::
     call CoordToAddr
     call PrintTile
     ret
 
 ; Prints tiles at HL to DE, will stop at $FF
-PrintTiles:
+PrintTiles::
     ldi a, [hl]
     cp $FF
     jr z, .done ; End here if we're at the end
@@ -69,7 +71,7 @@ PrintTiles:
     ret
 
 ; Print Tiles HL to Y,X coords at BC with base address DE, will stop at $FF
-PrintTilesAt:
+PrintTilesAt::
     call CoordToAddr
     call PrintTiles
     ret

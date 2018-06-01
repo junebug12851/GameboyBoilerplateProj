@@ -2,22 +2,22 @@
 ; by calling DMA transfer multiple times a frame
 section "OAM Buffer", wram0[$C000]
 
-wOamBuffer:
+wOamBuffer::
     ds 4*40
 
 section "WRAM", wram0
 
 ; Page of OAM data to load into OAM
 ; As a shortcut it contains the High Nibble Address Offset as the page number
-wOamPage:
+wOamPage::
     ds 1
 
 ; Currently Pressing Buttons
-wJoyDown:
+wJoyDown::
     ds 1
 
 ; Pressed and Released Buttons
-wJoyUp:
+wJoyUp::
     ds 1
 
 ; 5 clock bytes directly from the RTC clock
@@ -25,10 +25,10 @@ wJoyUp:
 ; DaysU Flags
 ;       Bit 6 - Halt status (Auto Set on Clock Update)
 ;       Bit 7 - Day carry
-wClock:
+wClock::
     ds 5
 
 ; Did the SRAM have to be formatted this time around?
 ; 1 = Yes, 0 = No
-wSRAMForm:
+wSRAMForm::
     ds 1

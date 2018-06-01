@@ -103,5 +103,7 @@ charmap "░", 95
 charmap "▒", 96
 charmap "▓", 97
 
+; Apparently Charmap can only handle Ascii Characters up to 127
+
 ; Empty
 charmap " ", 98

@@ -1,3 +1,6 @@
+include "./src/Engine/Banks.inc"
+include "./src/Engine/MBC.inc"
+
 section "Banks", rom0
 
 ; This game uses Memory Bank Controller 3
@@ -5,62 +8,12 @@ section "Banks", rom0
 ; 4 RAM Banks (32KB)
 ; RTC Clock
 
-; Calls from rom bank 1+ to another rom bank 1+ and back
-; \1 label
-farcallrom:      macro
-    ld b, BANK(\1)
-    ld hl, \2
-    call FarcallRom
-endm
-
-; Jumps to rom bank 1+ from anywhere
-; \1 label
-farjprom:    macro
-    ld b, BANK(\1)
-    ld hl, \2
-    jp FarJpRom
-endm
-
-; Calls from one ram bank to another ram bank and back
-; \1 label
-farcallsram:      macro
-    ld b, BANK(\1)
-    ld hl, \2
-    call FarcallSRam
-endm
-
-; Jumps to any sram bank from another sram bank
-; \1 label
-farjpsram:    macro
-    ld b, BANK(\1)
-    ld hl, \2
-    jp FarJpSRam
-endm
-
-; Calls from outside sram to sram and back, handles boot
-; and shutdown of sram
-; \1 label
-callsram:      macro
-    ld b, BANK(\1)
-    ld hl, \2
-    call CallSRam
-endm
-
-; Jumps to any sram bank from outside sram
-; you are responsible for shutting down SRAM afterwards
-; \1 label
-jpsram:    macro
-    ld b, BANK(\1)
-    ld hl, \2
-    jp JpSRam
-endm
-
 ; Makes a call from anywhere to rom bank1+ and back
 ; given your calling from the non-home bank
 ; This makes a lot of clever hacks to get this to work
 ; B = Bank #
 ; HL = Call address
-FarcallRom:
+FarcallRom::
 	ld a, [$4000]
 	push af ; Save current rom bank
 
@@ -90,7 +43,7 @@ FarcallRom:
 ; Callable from anywhere to rom bank 1+
 ; b = Bank Number
 ; hl = Address
-FarJpRom:
+FarJpRom::
     ld a, b
 	MBCSelectROMb ; Switch to new ROM Bank
     jp hl
@@ -99,7 +52,7 @@ FarJpRom:
 ; Makes a call from one sram bank to another and back
 ; B = Bank #
 ; HL = Call address
-FarcallSRam:
+FarcallSRam::
 	ld a, [$A000]
 	push af ; Save current sram bank
 
@@ -119,7 +72,7 @@ FarcallSRam:
 ; Callable from any sram bank to any sram bank
 ; b = Bank Number
 ; hl = Address
-FarJpSram:
+FarJpSram::
     ld a, b
 	MBCSelectRAMb ; Switch to new ROM Bank
     jp hl
@@ -135,7 +88,7 @@ FarJpSram:
 ; 
 ; B = Bank #
 ; HL = Call address
-CallSRam:
+CallSRam::
     MBCPowerOn
 	ld a, b
 	MBCSelectRAMb ; Switch to sram Bank
@@ -153,7 +106,7 @@ CallSRam:
 ; You will be responsible for shutting down SRAM when done
 ; b = Bank Number
 ; hl = Address
-JpSram:
+JpSram::
     MBCPowerOn
     ld a, b
 	MBCSelectRAMb ; Switch to new RAM Bank
