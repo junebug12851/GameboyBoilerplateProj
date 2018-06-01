@@ -1,8 +1,8 @@
 ; Allow more than one set of OAM buffers which also allows multiple sets to be used in one frame
 ; by calling DMA transfer multiple times a frame
-section "OAM Buffer Page 1", wram0[$C000]
+section "OAM Buffer", wram0[$C000]
 
-wOamBuffer1:
+wOamBuffer:
     ds 4*40
 
 section "WRAM", wram0
