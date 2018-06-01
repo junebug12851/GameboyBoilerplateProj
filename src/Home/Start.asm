@@ -2,6 +2,7 @@ include "./src/Engine/MBC.inc"
 include "./src/Setup/Hardware.inc"
 include "./src/Home/LCD.inc"
 include "./src/Home/Data.inc"
+include "./src/Engine/Graphics.inc"
 
 section "Start", rom0
 
@@ -21,7 +22,7 @@ Start::
 
 	call WipeMemory ; Erase all VRAM, RAM, and OAM
 	call MBCRunOnce ; Checks, procedures, init, potential formatting, and whatnot to the MBC and internal memory
-	MBCSelectROM 1 ; Open ROM Bank 1 for external bank
+	mbc_select "rom", 1 ; Open ROM Bank 1 for external bank
 
 	ld a, 0
 	ld [rSCY], a
@@ -43,23 +44,10 @@ Start::
 	ld  a,LCDCF_BGON | LCDCF_OBJON | LCDCF_TD8000 | LCDCF_BG9C00 | LCDCF_WIN9C00 | LCDCF_ON
 	ldh [rLCDC],a
 
-	ld b, (17/2) - 1
-	ld c, (20/2) - (16/2)
-	ld de, _MAP0
-	ld hl, GameBoyStr
-	call PrintTilesAt
-
-	ld b, (17/2)
-	ld c, (20/2) - (16/2)
-	ld de, _MAP0
-	ld hl, BoilerPlateProjectStr
-	call PrintTilesAt ; Print Gameboy boiler plate project centered horizontally and vertically
-
-	ld b, (17/2) + 2
-	ld c, (20/2) - (16/2)
-	ld de, _MAP0
-	ld hl, EmoticonStr
-	call PrintTilesAt
+	; Print Gameboy boiler plate project centered horizontally and vertically
+	printstr GameBoyStr, 			_MAP1, 	(17/2) - 1, 	(20/2) - (16/2)
+	printstr BoilerPlateProjectStr, _MAP1, 	(17/2), 		(20/2) - (16/2)
+	printstr EmoticonStr, 			_MAP1, 	(17/2) + 2, 	(20/2) - (16/2)
 
 	call DMAInstall    ;Install DMA to HRAM (also initiates first run)
 	jp GameLoop

@@ -1,4 +1,6 @@
 include "./src/Engine/MBC.inc"
+include "./src/Home/Data.inc"
+include "./src/Setup/Misc.inc"
 
 section "MBC Engine", rom0
 
@@ -16,74 +18,80 @@ SRAMSigEnd::
 
 ; Gets RTC Data
 MBCGetRTC::
-    ld hl, $A000 ; Load RTC Clock Read Address
+    ld hl, _SRAM ; Load RTC Clock Read Address
     ld de, wClock ; Load Save address
 
-    MBCPowerOn
-    MBCLatchRTC ; Power on and latch new data
+    mbc_power "on"
+    mbc_latchrtc ; Power on and latch new data
 
-    MBCSelectRTCSec
+    mbc_select "rtc", "s"
     ld a, [hl]
     ld [de], a
     inc de ; Save seconds to byte 1
 
-    MBCSelectRTCMin
+    mbc_select "rtc", "m"
     ld a, [hl]
     ld [de], a
     inc de ; Save minutes to byte 2
 
-    MBCSelectRTCHour
+    mbc_select "rtc", "h"
     ld a, [hl]
     ld [de], a
     inc de ; Save hours to byte 3
 
-    MBCSelectRTCDayL
+    mbc_select "rtc", "dl"
     ld a, [hl]
     ld [de], a
     inc de ; Save 8 of 9 day bits to byte 4
 
-    MBCSelectRTCDayU
+    mbc_select "rtc", "du"
     ld a, [hl]
     ld [de], a ; Save 9th day bit and flags to byte 5
 
-    MBCPowerOff ; Power off
+    mbc_power "off" ; Power off
     ret
 
 ; Updates RTC Clock with data from wClock
 MBCSetRTC::
     ld hl, wClock
-    ld de, $A000
+    ld de, _SRAM
 
-    MBCPowerOn
-    MBCLatchRTC ; Power on and latch new data
+    mbc_power "on"
+    mbc_latchrtc ; Power on and latch new data
 
-    MBCSelectRTCDayU
+    mbc_select "rtc", "du"
     ld a, [de]
-    set 6, a
+    set MBC3_RTC_DUB_HALT, a
     ld [de], a ; Before changing the RTC clock we have to stop it first
+    mbc_wait
 
-    MBCSelectRTCSec
+    mbc_select "rtc", "s"
     ld a, [hli]
     ld [de], a
+    mbc_wait
 
-    MBCSelectRTCMin
+    mbc_select "rtc", "m"
     ld a, [hli]
     ld [de], a
+    mbc_wait
 
-    MBCSelectRTCHour
+    mbc_select "rtc", "h"
     ld a, [hli]
     ld [de], a
+    mbc_wait
 
-    MBCSelectRTCDayL
+    mbc_select "rtc", "dl"
     ld a, [hli]
     ld [de], a
+    mbc_wait
 
-    MBCSelectRTCDayU
+    mbc_select "rtc", "du"
     ld a, [hli]
-    res 6, a ; Re-enable clock also
+    res MBC3_RTC_DUB_HALT, a ; Re-enable clock also
     ld [de], a
+    mbc_wait
 
-    MBCPowerOff
+    mbc_power "off"
     ret
 
 ; Formats the RAM if it needs formatting
@@ -91,59 +99,41 @@ MBCSetRTC::
 ; A=0 if not
 MBCRamAutoFormat::
 
-    MBCPowerOn
-    MBCSelectRAM 0 ; Power on and switch to RAM 0
+    mbc_power "on"
+    mbc_select "ram", 0 ; Power on and switch to RAM 0
 
-    ld hl, SRAMSig
-    ld de, sSignature
-    ld bc, SRAMSigEnd - SRAMSig
-    call VerifyData ; Very signature matches
+    verify SRAMSig, sSignature, SRAMSigEnd - SRAMSig ; Very signature matches
 
-    cp 1
+    cp TRUE
     jr nz, MBCRamFormat
 
     ; External RAM doesn't need formatting
-    MBCPowerOff
-    ld a, 0
+    mbc_power "off"
+    ld a, FALSE
     ret
 
 ; Format Ram without checking if it needs formatting
 MBCRamFormat::
-    ld de, $A000 ; Start of SRAM
-	ld bc, $BFFF - $A000 ; All through SRAM
-	ld a, 0
-	call FillData
 
-    MBCSelectRAM 1
+    mbc_power "on"
 
-    ld de, $A000 ; Start of SRAM
-	ld bc, $BFFF - $A000 ; All through SRAM
-	ld a, 0
-	call FillData
+    mbc_select "ram", 0 ; Remember this is also an external function
+    fill _SRAM, _SRAM_SIZE, 0
 
-    MBCSelectRAM 2
-    
-    ld de, $A000 ; Start of SRAM
-	ld bc, $BFFF - $A000 ; All through SRAM
-	ld a, 0
-	call FillData
+    mbc_select "ram", 1
+    fill _SRAM, _SRAM_SIZE, 0
 
-    MBCSelectRAM 3
-    
-    ld de, $A000 ; Start of SRAM
-	ld bc, $BFFF - $A000 ; All through SRAM
-	ld a, 0
-	call FillData
+    mbc_select "ram", 2
+    fill _SRAM, _SRAM_SIZE, 0
+
+    mbc_select "ram", 3
+    fill _SRAM, _SRAM_SIZE, 0
 
     ; Formatted 32 KB of RAM
     ; Now initial setup the RAM
 
-    MBCSelectRAM 0
-
-    ld hl, SRAMSig
-    ld de, sSignature
-    ld bc, SRAMSigEnd - SRAMSig
-    call CopyData ; Insert Signature
+    mbc_select "ram", 0
+    copy SRAMSig, sSignature, SRAMSigEnd - SRAMSig ; Copy signature
 
     call MBCUpdateRamVersion ; Update RAM Version
 
@@ -154,26 +144,26 @@ MBCRamFormat::
     ; MBCUpdateRamVersion is a function to be called from the outside
     ; it cleans up after itself and shuts down RAM, we need to boot
     ; RAM back up
-    MBCPowerOn
-    MBCSelectRAM 0
+    mbc_power "on"
+    mbc_select "ram", 0
 
     ld hl, sBank0No
     ld a, 0
     ld [hl], a
 
-    MBCSelectRAM 1
+    mbc_select "ram", 1
 
     ld hl, sBank1No
     ld a, 1
     ld [hl], a
 
-    MBCSelectRAM 2
+    mbc_select "ram", 2
 
     ld hl, sBank2No
     ld a, 2
     ld [hl], a
 
-    MBCSelectRAM 3
+    mbc_select "ram", 3
 
     ld hl, sBank3No
     ld a, 3
@@ -181,13 +171,13 @@ MBCRamFormat::
 
     ; Shutdown RAM since we're done with RAM setup
 
-    MBCPowerOff
+    mbc_power "off"
     ld a, 1
     ret
 
 MBCUpdateRamVersion::
-    MBCPowerOn
-    MBCSelectRAM 0
+    mbc_power "on"
+    mbc_select "ram", 0
 
     ld a, SRAMVersionU
     ld de, sVersion
@@ -196,26 +186,25 @@ MBCUpdateRamVersion::
     ld a, SRAMVersionL
     ld [de], a ; Update SRAM version
 
-    MBCPowerOff
+    mbc_power "off"
     ret
 
 ; Initial checks, procedures, and whatnot
 MBCRunOnce::
     call MBCRamAutoFormat
-    cp 1
+    cp TRUE
     jr z, .formatted
 
     ld hl, wSRAMForm
-    ld a, 0
+    ld a, FALSE
     ld [hl], a ; Was not formatted
     jr .continue
 
 .formatted
     ld hl, wSRAMForm
-    ld a, 1
+    ld a, TRUE
     ld [hl], a ; Was formatted
 
 .continue
-    call MBCGetRTC ; Retrive Clock Data
+    mbc_updatever ; Update version on MBC RAM
     ret
-

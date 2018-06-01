@@ -1,3 +1,6 @@
+if      !def(DATA_INC)
+DATA_INC  set  1
+
 ; Copies data
 ; \1 = from
 ; \2 = to
@@ -33,3 +36,5 @@ verify:     macro
 
     call VerifyData
 endm
+
+endc

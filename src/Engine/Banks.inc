@@ -1,8 +1,8 @@
-; Calls from rom bank 1+ to another rom bank 1+ and back
+; Calls to rom bank 1+ from anywhere
 ; \1 label
 farcallrom:      macro
     ld b, BANK(\1)
-    ld hl, \2
+    ld hl, \1
     call FarcallRom
 endm
 
@@ -10,7 +10,7 @@ endm
 ; \1 label
 farjprom:    macro
     ld b, BANK(\1)
-    ld hl, \2
+    ld hl, \1
     jp FarJpRom
 endm
 
@@ -18,7 +18,7 @@ endm
 ; \1 label
 farcallsram:      macro
     ld b, BANK(\1)
-    ld hl, \2
+    ld hl, \1
     call FarcallSRam
 endm
 
@@ -26,7 +26,7 @@ endm
 ; \1 label
 farjpsram:    macro
     ld b, BANK(\1)
-    ld hl, \2
+    ld hl, \1
     jp FarJpSRam
 endm
 
@@ -35,7 +35,7 @@ endm
 ; \1 label
 callsram:      macro
     ld b, BANK(\1)
-    ld hl, \2
+    ld hl, \1
     call CallSRam
 endm
 
@@ -44,6 +44,6 @@ endm
 ; \1 label
 jpsram:    macro
     ld b, BANK(\1)
-    ld hl, \2
+    ld hl, \1
     jp JpSRam
 endm

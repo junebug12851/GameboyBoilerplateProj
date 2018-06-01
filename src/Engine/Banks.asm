@@ -1,5 +1,6 @@
 include "./src/Engine/Banks.inc"
 include "./src/Engine/MBC.inc"
+include "./src/Setup/Hardware.inc"
 
 section "Banks", rom0
 
@@ -14,11 +15,11 @@ section "Banks", rom0
 ; B = Bank #
 ; HL = Call address
 FarcallRom::
-	ld a, [$4000]
+	ld a, [_ROMX]
 	push af ; Save current rom bank
 
 	ld a, b
-	MBCSelectROMb ; Switch to new ROM Bank
+	mbc_select "rom", "runtime" ; Switch to new ROM Bank
 
     ; We're going to emulate a stack call in a hack
     ; Save the .return address below onto the stack
@@ -36,7 +37,7 @@ FarcallRom::
     ; the af from above that we pushed which contained current
     ; rom bank in a
 	pop af
-	MBCSelectROMb ; Switch to previous ROM Bank
+	mbc_select "rom", "runtime" ; Switch to previous ROM Bank
 	ret
 
 ; Switches to new ROM Bank and jumps to an address there
@@ -45,7 +46,7 @@ FarcallRom::
 ; hl = Address
 FarJpRom::
     ld a, b
-	MBCSelectROMb ; Switch to new ROM Bank
+	mbc_select "rom", "runtime" ; Switch to new ROM Bank
     jp hl
 
 ; Similar to FarCallRom but works for strictly within SRAM
@@ -53,11 +54,11 @@ FarJpRom::
 ; B = Bank #
 ; HL = Call address
 FarcallSRam::
-	ld a, [$A000]
+	ld a, [_SRAM]
 	push af ; Save current sram bank
 
 	ld a, b
-	MBCSelectRAMb ; Switch to new sram Bank
+	mbc_select "ram", "runtime" ; Switch to new sram Bank
 	ld bc, .return
 	push bc
 
@@ -65,7 +66,7 @@ FarcallSRam::
 
 .return
 	pop af
-	MBCSelectRAMb ; Switch to previous sram Bank
+	mbc_select "ram", "runtime" ; Switch to previous sram Bank
 	ret
 
 ; Switches to new RAM Bank and jumps to an address there
@@ -74,7 +75,7 @@ FarcallSRam::
 ; hl = Address
 FarJpSram::
     ld a, b
-	MBCSelectRAMb ; Switch to new ROM Bank
+	mbc_select "ram", "runtime" ; Switch to new ROM Bank
     jp hl
 
 ; Calls a bank in SRAM from outside the RAM
@@ -89,16 +90,16 @@ FarJpSram::
 ; B = Bank #
 ; HL = Call address
 CallSRam::
-    MBCPowerOn
+    mbc_power "on"
 	ld a, b
-	MBCSelectRAMb ; Switch to sram Bank
+	mbc_select "ram", "runtime" ; Switch to sram Bank
 	ld bc, .return
 	push bc
 
 	jp hl ; Jump (call in this case) to address
 
 .return
-    MBCPowerOff
+    mbc_power "off"
 	ret
 
 ; Boots up SRAM to a bank and jumps to an address there
@@ -107,7 +108,7 @@ CallSRam::
 ; b = Bank Number
 ; hl = Address
 JpSram::
-    MBCPowerOn
+    mbc_power "on"
     ld a, b
-	MBCSelectRAMb ; Switch to new RAM Bank
+	mbc_select "ram", "runtime" ; Switch to new RAM Bank
     jp hl

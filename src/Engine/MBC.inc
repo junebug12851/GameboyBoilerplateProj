@@ -1,37 +1,33 @@
+include "./src/Setup/Hardware.inc"
+include "./src/Home/Data.inc"
+
 ; Increments only upon breaking changes or changes that introduce compatibility requirements
 SRAMVersionU EQU $00
 SRAMVersionL EQU $02
 
 ; This engine provides a nice API for all of those
-MBCWait:     macro
+mbc_wait:     macro
     nop
     nop
     nop
     nop
 endm
 
-; Powers on External RAM and RTC Clock
+; Powers on or off External RAM and RTC Clock
 ; Turn off as soon as done
-MBCPowerOn:   macro
+; \1 = on or off
+mbc_power:   macro
     push af
     push hl
 
-    ld a, $a
-    ld hl, $0
+    if \1 == "on"
+        ld a, MBC3_EN_RAM_CODE
+    else
+        ld a, MBC3_DIS_RAM_CODE
+    endc
+
+    ld hl, MBC3_ENABLE_RAM
     ld [hl], a ; Give power on code
-
-    pop hl
-    pop af
-endm
-
-; Powers off External RAM and RTC Clock
-MBCPowerOff:   macro
-    push af
-    push hl
-
-    ld a, $0
-    ld hl, $0
-    ld [hl], a ; Give power off code
 
     pop hl
     pop af
@@ -39,180 +35,181 @@ endm
 
 ; Select external ROM bank
 ; 0x01-0x7F
-MBCSelectROM:   macro
+; \1 = ROM Bank Number or "runtime" (Use register a instead)
+mbc_selectrom:   macro
     push af
     push hl
 
-    ld a, \1
-    ld hl, $2000
+    if \1 != "runtime"
+        ld a, \1
+    endc
+
+    ld hl, MBC3_ROM_SELECT
     ld [hl], a ; Switch external ROM bank
 
     pop hl
     pop af
-endm
-
-; Register based rom select, register a
-MBCSelectROMb:  macro
-    push hl
-
-    ld hl, $2000
-    ld [hl], a ; Switch external ROM bank
-
-    pop hl
 endm
 
 ; Select external RAM bank
 ; 0x00-0x03
-MBCSelectRAM:   macro
+; \1 = RAM Bank Number or "runtime" (Use register a instead)
+mbc_selectram:   macro
     push af
     push hl
 
-    ld a, \1
-    ld hl, $4000
+    if \1 != "runtime"
+        ld a, \1
+    endc
+
+    ld hl, MBC3_RAM_SELECT
     ld [hl], a ; Switch external RAM bank
 
     pop hl
     pop af
 endm
 
-; Register based ram select, register a
-MBCSelectRAMb:   macro
-    push hl
+; Selects an RTC register in MBC
+; \1 = register name
+;       "s", "m", "h", "dl", "du"
+mbc_selectrtc:      macro
+    if \1 == "s"
+        mbc_selectram MBC3_RTC_S_BNK
+    elif \1 == "m"
+        mbc_selectram MBC3_RTC_M_BNK
+    elif \1 == "h"
+        mbc_selectram MBC3_RTC_H_BNK
+    elif \1 == "dl"
+        mbc_selectram MBC3_RTC_DL_BNK
+    elif \1 == "du"
+        mbc_selectram MBC3_RTC_DU_BNK
+    endc
 
-    ld hl, $4000
-    ld [hl], a ; Switch external RAM bank
-
-    pop hl
+    mbc_wait
 endm
 
-MBCSelectRTCSec:    macro
-    push af
-    push hl
-
-    ld a, $8
-    ld hl, $4000
-    ld [hl], a ; Switch external RTC seconds bank
-
-    MBCWait ; Give it 4 cycles to kick on
-
-    pop hl
-    pop af
-endm
-
-MBCSelectRTCMin:    macro
-    push af
-    push hl
-
-    ld a, $9
-    ld hl, $4000
-    ld [hl], a ; Switch external RTC minutes bank
-
-    MBCWait ; Give it 4 cycles to kick on
-
-    pop hl
-    pop af
-endm
-
-MBCSelectRTCHour:    macro
-    push af
-    push hl
-
-    ld a, $A
-    ld hl, $4000
-    ld [hl], a ; Switch external RTC hours bank
-
-    MBCWait ; Give it 4 cycles to kick on
-
-    pop hl
-    pop af
-endm
-
-MBCSelectRTCDayL:    macro
-    push af
-    push hl
-
-    ld a, $B
-    ld hl, $4000
-    ld [hl], a ; Switch external RTC days lower bank
-
-    MBCWait ; Give it 4 cycles to kick on
-
-    pop hl
-    pop af
-endm
-
-; Bit 0  Most significant bit of Day Counter (Bit 8)
-; Bit 6  Halt (0=Active, 1=Stop Timer) (Set this before changing the timer)
-; Bit 7  Day Counter Carry Bit (1=Counter Overflow)
-MBCSelectRTCDayU:    macro
-    push af
-    push hl
-
-    ld a, $C
-    ld hl, $4000
-    ld [hl], a ; Switch external RTC days upper bank with flags
-
-    MBCWait ; Give it 4 cycles to kick on
-
-    pop hl
-    pop af
+; Performs one of 3 MBC Selects
+; \1 = "rom", "ram", or "rtc"
+; \2 = arg to mbc_select <check specific macro>
+mbc_select:         macro
+    if \1 == "rom"
+        mbc_selectrom \2
+    elif \1 == "ram"
+        mbc_selectram \2
+    elif \1 == "rtc"
+        mbc_selectrtc \2
+    endc
 endm
 
 ; Latch new RTC Data
-MBCLatchRTC:        macro
+mbc_latchrtc:        macro
     push af
     push hl
 
-    ld a, $0
-    ld hl, $6000
+    ld a, MBC3_LATCH_CODE_1
+    ld hl, MBC3_RTC_LATCH
     ld [hl], a ; 1st step in latching new RTC
 
-    MBCWait ; Give it 4 cycles to kick in
+    mbc_wait ; Give it 4 cycles to kick in
 
-    ld a, $1
-    ld hl, $6000
+    ld a, MBC3_LATCH_CODE_2
+    ld hl, MBC3_RTC_LATCH
     ld [hl], a ; 2nd step in latching
 
-    MBCWait ; Give it 4 cycles to kick in
+    mbc_wait ; Give it 4 cycles to kick in
 
     pop hl
     pop af
 endm
 
 ; Copies to or from an MBC Bank
-; Copy bc bytes from hl to de on bank <arg 1>
-MBCCopy:        MACRO
-    MBCPowerOn
-    MBCSelectRAM \1
-    call CopyData
-    MBCPowerOff
+; Copy bc bytes from hl to de on bank #
+; \1 = "ram" or "rom"
+; \2 = bank number
+; \3 = from
+; \4 = to
+; \5 = count
+mbc_copy:        macro
+    if \1 == "ram"
+        mbc_power "on"
+    endc
+
+    mbc_select \1, \2
+    copy \3, \4, \5
+
+    if \1 == "ram"
+        mbc_power "off"
+    endc
 endm
 
 ; Fills data to MBC Bank
-; Fills bc bytes at de with a value on bank <arg 1>
-MBCFill:        MACRO
-    MBCPowerOn
-    MBCSelectRAM \1
-    call FillData
-    MBCPowerOff
+; Fills bc bytes at de with a value on bank #
+; \1 = "ram" or "rom"
+; \2 = bank number
+; \3 = to
+; \4 = count
+; \5 = value
+mbc_fill:        macro
+    if \1 == "ram"
+        mbc_power "on"
+    endc
+
+    mbc_select \1, \2
+    fill \3, \4, \5
+
+    if \1 == "ram"
+        mbc_power "off"
+    endc
 endm
 
 ; Verifies data in MBC Bank
 ; Verify Bytes matchup from HL to DE for BC bytes or stops immidiately
 ; Returns a=0 if didn't verify and a=1 if did verify
-MBCVerify:        MACRO
-    MBCPowerOn
-    MBCSelectRAM \1
-    call VerifyData
-    MBCPowerOff
+; \1 = "ram" or "rom"
+; \2 = bank number
+; \3 = from
+; \4 = to
+; \5 = count
+mbc_verify:        macro
+    if \1 == "ram"
+        mbc_power "on"
+    endc
+
+    mbc_select \1, \2
+    verify \3, \4, \5
+
+    if \1 == "ram"
+        mbc_power "off"
+    endc
 endm
 
-; Gets a single byte from the sram at HL and saves it to A
-MBCGetByte:        MACRO
-    MBCPowerOn
-    MBCSelectRAM \1
+; Gets a single byte from rom or ram at HL and saves it to A
+; \1 = "ram" or "rom"
+; \2 = bank number
+; \3 = address
+mbc_byte:        MACRO
+    if \1 == "ram"
+        mbc_power "on"
+    endc
 
+    mbc_select \1, \2
     ld a, [hl]
 
-    MBCPowerOff
+    if \1 == "ram"
+        mbc_power "off"
+    endc
+endm
+
+; Becuase it's prettier
+
+mbc_getrtc: macro
+    call MBCGetRTC
+endm
+
+mbc_setrtc: macro
+    call MBCSetRTC
+endm
+
+mbc_updatever: macro
+    call MBCUpdateRamVersion
 endm
