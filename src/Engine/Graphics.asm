@@ -1,3 +1,4 @@
+include "./src/Engine/Graphics.inc"
 include "./src/Home/LCD.inc"
 
 section "graphics", rom0
@@ -61,7 +62,7 @@ PrintTileAt::
 ; Prints tiles at HL to DE, will stop at $FF
 PrintTiles::
     ldi a, [hl]
-    cp $FF
+    cp GSTOP
     jr z, .done ; End here if we're at the end
 
     call PrintTile

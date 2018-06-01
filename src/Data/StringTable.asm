@@ -1,15 +1,16 @@
 include "./src/Setup/Charmap.inc"
+include "./src/Engine/Graphics.inc"
 
 section "StringTable", rom0
 
 HelloWorldStr::
-	db "Hello World! ^_^;", $ff
+	db "Hello World! ^_^;", GSTOP
 
 GameBoyStr::
-	db "▓▒░ Game Boy ░▒▓", $ff
+	db "▓▒░ Game Boy ░▒▓", GSTOP
 
 BoilerPlateProjectStr::
-	db "Boilerplate Proj", $ff
+	db "Boilerplate Proj", GSTOP
 
 EmoticonStr::
-	db "     (^.^)      ", $ff
+	db "     (^.^)      ", GSTOP
