@@ -20,91 +20,13 @@
 ;* Rev 2.3 -           : Fixed incorrect _HRAM equate
 ;* Rev 2.4 -           : Completed CART defines
 ;* Rev 2.5 -           : Fixed bug in CART defines
+;* Rev 2.6 -           : Corrected and fixed lots of stuff, broke apart
 
-; If all of these are already defined, don't do it again.
+include "./src/Setup/Hardware/MemoryMap.inc"
+include "./src/Setup/Hardware/MBC3.inc"
+include "./src/Setup/Hardware/OAM.inc"
 
-        IF      !DEF(HARDWARE_INC)
-HARDWARE_INC  SET  1
-
-rev_Check_hardware_inc: MACRO
-;NOTE: REVISION NUMBER CHANGES MUST BE ADDED
-;TO SECOND PARAMETER IN FOLLOWING LINE.
-        IF      \1 > 2.2      ;PUT REVISION NUMBER HERE
-        WARN    "Version \1 or later of 'hardware.inc' is required."
-        ENDC
-        ENDM
-
-_HW	EQU $FF00
-
-_VRAM         EQU  $8000 ; $8000->$A000
-_SCRN0        EQU  $9800 ; $9800->$9BFF
-_SCRN1        EQU  $9C00 ; $9C00->$9FFF
-_RAM          EQU  $C000 ; $C000->$E000
-_HRAM         EQU  $FF80 ; $FF80->$FFFE
-_OAMRAM       EQU  $FE00 ; $FE00->$FE9F
-_AUD3WAVERAM  EQU  $FF30 ; $FF30->$FF3F
-_ECHO         EQU  $E000 ; $E000->$FDFF
-
-; *** MBC5 Equates ***
-
-rRAMG         EQU  $0000 ; $0000->$1fff
-rROMB0        EQU  $2000 ; $2000->$2fff
-rROMB1        EQU  $3000 ; $3000->$3fff
-rRAMB         EQU  $4000 ; $4000->$5fff
-
-
-; --
-; -- OAM flags
-; --
-
-OAMF_PRI    EQU  %10000000 ; Priority
-OAMF_YFLIP  EQU  %01000000 ; Y flip
-OAMF_XFLIP  EQU  %00100000 ; X flip
-OAMF_PAL0   EQU  %00000000 ; Palette number; 0,1
-OAMF_PAL1   EQU  %00010000 ; Palette number; 0,1
-
-
-;***************************************************************************
-;*
-;* Custom registers
-;*
-;***************************************************************************
-
-; --
-; -- P1 ($FF00)
-; -- Register for reading joy pad info.    (R/W)
-; --
-rP1 EQU $FF00
-
-P1F_5   EQU  %00100000 ; P15 out port
-P1F_4   EQU  %00010000 ; P14 out port
-P1F_3   EQU  %00001000 ; P13 in port
-P1F_2   EQU  %00000100 ; P12 in port
-P1F_1   EQU  %00000010 ; P11 in port
-P1F_0   EQU  %00000001 ; P10 in port
-
-JOY EQU rP1
-JOY_BTNS EQU P1F_5 ; BTNS Out Port
-JOY_DPAD EQU P1F_4 ; DPAD Out Port
-JOY_DOWN_START EQU P1F_3 ; Down or Start
-JOY_UP_SELECT EQU P1F_2 ; Up or Select
-JOY_LEFT_B EQU P1F_1 ; Left or B
-JOY_RIGHT_A EQU P1F_0 ; Right or A
-
-JOY_SEL_MASK EQU %00110000
-JOY_INP_MASK EQU %00001111
-
-; Joy bitmask after retrieving joypad
-
-JOY_FLAG_DOWN EQU %10000000
-JOY_FLAG_UP EQU %01000000
-JOY_FLAG_LEFT EQU %00100000
-JOY_FLAG_RIGHT EQU %00010000
-
-JOY_FLAG_START EQU %00001000
-JOY_FLAG_SELECT EQU %00000100
-JOY_FLAG_B EQU %00000010
-JOY_FLAG_A EQU %00000001
+include "./src/Setup/Hardware/Joypad.inc"
 
 ; --
 ; -- SB ($FF01)
@@ -764,5 +686,3 @@ NINTENDO_LOGO:   MACRO
  DB $00,$08,$11,$1F,$88,$89,$00,$0E,$DC,$CC,$6E,$E6,$DD,$DD,$D9,$99
  DB $BB,$BB,$67,$63,$6E,$0E,$EC,$CC,$DD,$DC,$99,$9F,$BB,$B9,$33,$3E
         ENDM
-
-        ENDC    ;HARDWARE_INC

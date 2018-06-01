@@ -1,8 +1,8 @@
 JOY_DEBOUNCE:   MACRO
-    ld  a,[JOY]		 ;takes a few cycles to get accurate reading
-	ld  a,[JOY]
-	ld  a,[JOY]
-	ld  a,[JOY]
+    ld  a,[rJOY]		 ;takes a few cycles to get accurate reading
+	ld  a,[rJOY]
+	ld  a,[rJOY]
+	ld  a,[rJOY]
 ENDM
 
 JoyBtnDown:     MACRO

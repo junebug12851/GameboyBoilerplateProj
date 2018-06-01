@@ -4,18 +4,18 @@ include "./src/Setup/Hardware.inc"
 section "JoypadMngmt", rom0
 
 ReadJoypad::
-	ld  a,JOY_DPAD ;select dpad
+	ld  a,JOYF_DPAD ;select dpad
 	JOY_DEBOUNCE
 	cpl 			 ;complement a (Invert)
-	and JOY_INP_MASK   ;Keep dpad buttons
+	and JOYF_MASK_READ   ;Keep dpad buttons
 	swap a
 
 	ld  b,a ; Load DPAD Buttons only on upper half
 
-	ld  a,JOY_BTNS ;select btns
+	ld  a,JOYF_BTNS ;select btns
 	JOY_DEBOUNCE
 	cpl 			 ;complement a (Invert)
-	and JOY_INP_MASK   ;Keep dpad buttons
+	and JOYF_MASK_READ   ;Keep dpad buttons
 
 	or  b ; Merge dpad buttons with other buttons
 
