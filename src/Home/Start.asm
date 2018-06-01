@@ -1,5 +1,7 @@
 include "./src/Engine/MBC.inc"
 include "./src/Setup/Hardware.inc"
+include "./src/Home/LCD.inc"
+include "./src/Home/Data.inc"
 
 section "Start", rom0
 
@@ -8,7 +10,7 @@ Start::
 	ei				 ;enable interrupts
 	ld  sp,$FFFE	 ; Set stack pointer to FFFE
 
-	call DisableLCD
+	lcd_off
 	ld  a,$0
 	ldh [rLCDC],a
 	ldh [rSTAT],a	;Disable LCD and Zero out LCDC and STAT
@@ -29,17 +31,15 @@ Start::
 	ld a, $C0
 	ld [wOamPage], a
 
-	ld hl, Tileset1
-	ld de, vTileset1
-	ld bc, Tileset1End - Tileset1
-	call CopyData ; Copy Font into Tile Data
+	; Copy Font into Tile Data
+	copy Tileset1, vTileset1, Tileset1End - Tileset1
 
 	; BG & LCD On
 	; 8x8 Tiles
 	; BG and Window share Tilemap Data $9C00-$9FFFF
 	; BG Data at $8000-$8FFF
 	; Window Off
-	call EnableLCD
+	lcd_on
 	ld  a,LCDCF_BGON | LCDCF_OBJON | LCDCF_TD8000 | LCDCF_BG9C00 | LCDCF_WIN9C00 | LCDCF_ON
 	ldh [rLCDC],a
 

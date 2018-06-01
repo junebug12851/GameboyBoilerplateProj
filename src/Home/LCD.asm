@@ -10,7 +10,7 @@ DisableLCD::
 	res 0, a
 	ld [rIE], a ; Disable VBlank
 
-	WaitVBlank ; Wait until next VBlank
+	wait_vblank ; Wait until next VBlank
 
 	ld a, [rLCDC]
 	res 7, a

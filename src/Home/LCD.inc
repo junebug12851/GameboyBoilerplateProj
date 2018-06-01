@@ -1,37 +1,46 @@
 include "./src/Setup/Hardware.inc"
 
-IsHBlank:       MACRO
+is_hblank:       macro
     ld a, [rSTAT]
-	and STATF_LCD
+	and STATF_MODE_MASK
     cp 0
-ENDM
+endm
 
-IsVBlank:       MACRO
+is_vblank:       macro
     ld a, [rSTAT]
-	and STATF_LCD
+	and STATF_MODE_MASK
     cp 1
-ENDM
+endm
 
-IsSearchingOAM: MACRO
+is_vram_busy: macro
     ld a, [rSTAT]
-	and STATF_LCD
+	and STATF_MODE_MASK
     cp 2
-ENDM
+endm
 
-IsUpdatingLCD: MACRO
+is_oam_vram_busy: macro
     ld a, [rSTAT]
-	and STATF_LCD
+	and STATF_MODE_MASK
     cp 3
-ENDM
+endm
 
-WaitHBlank:		MACRO
+wait_hblank:		macro
 .wait\@
-	IsHBlank
+	is_hblank
 	jr nz, .wait\@ ; Proceed when LCD reports HBlank
-ENDM
+endm
 
-WaitVBlank:		MACRO
+wait_vblank:		macro
 .wait\@
-	IsVBlank
+	is_vblank
 	jr nz, .wait\@ ; Proceed when LCD reports VBlank
-ENDM
+endm
+
+; Why? Because it looks waaayy prettier lol
+lcd_on:         macro
+    call EnableLCD
+endm
+
+lcd_off:        macro
+    call DisableLCD
+endm

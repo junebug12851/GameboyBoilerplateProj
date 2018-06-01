@@ -22,6 +22,9 @@
 ;* Rev 2.5 -           : Fixed bug in CART defines
 ;* Rev 2.6 -           : Corrected and fixed several parts, broke apart
 
+if      !def(HARDWARE_INC)
+HARDWARE_INC  set  1
+
 include "./src/Setup/Hardware/MemoryMap.inc"
 include "./src/Setup/Hardware/MBC3.inc"
 include "./src/Setup/Hardware/OAM.inc"
@@ -39,3 +42,5 @@ include "./src/Setup/Hardware/Sound/Sound2.inc"
 include "./src/Setup/Hardware/Sound/Sound3.inc"
 
 include "./src/Setup/Hardware/Header.inc"
+
+endc

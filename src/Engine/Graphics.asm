@@ -46,7 +46,7 @@ ret
 ; Prints Tile A to DE and increment so it can be used consecutively
 PrintTile::
     ld b, a
-    WaitVBlank
+    wait_vblank
     ld a, b ; Backup a and check for VBlank then restore a
 
     ld [de], a

@@ -62,9 +62,8 @@ STATF_LYCF          EQU %00000100 ; Coincidence Flag
 STATF_MODE_MASK     EQU %00000011
 STATF_HB            EQU %00000000 ; H-Blank
 STATF_VB            EQU %00000001 ; V-Blank
-STATF_OAM           EQU %00000010 ; OAM-RAM is used by system
-STATF_LCD           EQU %00000011 ; Both OAM and VRAM used by system
-STATF_BUSY          EQU %00000010 ; When set, VRAM access is unsafe
+STATF_BUSY          EQU %00000010 ; VRAM Busy
+STATF_LCD           EQU %00000011 ; OAM and VRAM Busy
 
 ; --
 ; -- LY ($FF44)
