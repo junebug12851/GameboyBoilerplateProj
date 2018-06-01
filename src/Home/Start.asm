@@ -15,7 +15,6 @@ Start::
 
 	ld  a,%11100100  ;shade palette (11 10 01 00)
 	ldh [rBGP],a
-	ldh [rOCPD],a
 	ldh [rOBP0],a	;setup palettes
 
 	call WipeMemory ; Erase all VRAM, RAM, and OAM
@@ -41,7 +40,7 @@ Start::
 	; BG Data at $8000-$8FFF
 	; Window Off
 	call EnableLCD
-	ld  a,LCDCF_BGON | LCDCF_OBJON | LCDCF_BG8000 | LCDCF_BG9C00 | LCDCF_WIN9C00 | LCDCF_ON
+	ld  a,LCDCF_BGON | LCDCF_OBJON | LCDCF_TD8000 | LCDCF_BG9C00 | LCDCF_WIN9C00 | LCDCF_ON
 	ldh [rLCDC],a
 
 	ld b, (17/2) - 1
