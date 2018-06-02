@@ -1,7 +1,7 @@
 include "./src/Includes.inc"
 include "./src/General/Charmap.inc"
 
-section "StringTable", rom0
+section "StringTable", romx,bank[1]
 
 HelloWorldStr::
 	db "Hello World! ^_^;", GSTOP
