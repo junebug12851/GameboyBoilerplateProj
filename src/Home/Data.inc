@@ -22,7 +22,7 @@ fill:       macro
     ld bc, \2
     ld a, \3
 
-    call CopyData
+    call FillData
 endm
 
 ; Verifies data

@@ -11,7 +11,7 @@ Start::
 	ei				 ;enable interrupts
 	ld  sp,$FFFE	 ; Set stack pointer to FFFE
 
-	lcd_off
+	lcd "off"
 	ld  a,$0
 	ldh [rLCDC],a
 	ldh [rSTAT],a	;Disable LCD and Zero out LCDC and STAT
@@ -40,7 +40,7 @@ Start::
 	; BG and Window share Tilemap Data $9C00-$9FFFF
 	; BG Data at $8000-$8FFF
 	; Window Off
-	lcd_on
+	lcd "on"
 	ld  a,LCDCF_BGON | LCDCF_OBJON | LCDCF_TD8000 | LCDCF_BG9C00 | LCDCF_WIN9C00 | LCDCF_ON
 	ldh [rLCDC],a
 

@@ -1,11 +1,10 @@
 include "./src/Setup/Hardware.inc"
+include "./src/Home/Data.inc"
 
 section "DMA", rom0
 DMAInstall::
-	ld  hl,RawDMACopyFunc
-	ld  de,hDMACopyFunc ;DMA routine, gets placed in HRAM
-	ld  bc,RawDMACopyFuncEnd-RawDMACopyFunc
-	call CopyData
+	; Copy DMA Routine to HRAM
+	copy RawDMACopyFunc, hDMACopyFunc, RawDMACopyFuncEnd-RawDMACopyFunc
 	ret
 
 RawDMACopyFunc:

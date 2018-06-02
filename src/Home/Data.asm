@@ -1,3 +1,5 @@
+include "./src/Setup/Misc.inc"
+
 section "Data", rom0
 
 CopyData::
@@ -49,9 +51,9 @@ VerifyData::
 	jr VerifyData ; Next loop
 
 .retFalse
-	ld a, 0
+	ld a, FALSE
 	ret
 
 .retTrue
-	ld a, 1
+	ld a, TRUE
 	ret

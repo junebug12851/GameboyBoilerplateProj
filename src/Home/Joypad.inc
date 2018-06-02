@@ -54,3 +54,9 @@ joypad_save:    macro
 	ld b, a
 	ld [wJoyDown], a ; Restore backup and save as buttons pressed and held
 endm
+
+; Prettier
+
+joypad_update:		macro
+	call ReadJoypad
+endm

@@ -1,5 +1,8 @@
 include "./src/Setup/Hardware.inc"
 
+; Other file was disabled, just too buggy both on it's on and
+; largely because of RGBDS unavoidable persistent bugs
+
 is_hblank:       macro
     ld a, [rSTAT]
 	and STATF_MODE_MASK
@@ -37,10 +40,12 @@ wait_vblank:		macro
 endm
 
 ; Why? Because it looks waaayy prettier lol
-lcd_on:         macro
-    call EnableLCD
-endm
-
-lcd_off:        macro
-    call DisableLCD
+; Turns LCD on or off
+; \1 "on" or "off"
+lcd:         macro
+    if \1 == "on"
+        call EnableLCD
+    else
+        call DisableLCD
+    endc    
 endm
