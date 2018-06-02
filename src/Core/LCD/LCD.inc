@@ -13,9 +13,15 @@ is_hblank:       macro
 endm
 
 is_vblank:       macro
+    ld a, [rLCDC]
+    bit 7, a
+    jr z, .end\@
+
     ld a, [rSTAT]
 	and STATF_MODE_MASK
     cp 1
+
+.end\@
 endm
 
 is_vram_busy: macro

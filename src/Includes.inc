@@ -1,7 +1,7 @@
 ; Master include file
 
 include "./src/General/Hardware.inc"
-include "./src/General/Charmap.inc"
+;include "./src/General/Charmap.inc" ; Disabled since it can be dangerous to auto-include everywhere
 include "./src/General/Misc.inc"
 
 include "./src/Core/Banks/Banks.inc"

@@ -2,8 +2,8 @@
 section "iVBlank", rom0 [$40]
 	jp VBlank
 
-section "iHBlank", rom0 [$48]
-	jp HBlank
+section "iLCDC", rom0 [$48]
+	jp LCDC
 
 section "iTimer",  rom0 [$50]
 	jp Timer

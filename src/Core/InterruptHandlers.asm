@@ -4,7 +4,7 @@ section "InterruptHandlers", rom0
 VBlank::
 	reti
 
-HBlank::
+LCDC::
 	reti
 
 Timer::

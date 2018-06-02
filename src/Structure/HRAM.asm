@@ -3,7 +3,7 @@ section "HRAM", hram
 ; HRAM is 126 Bytes
 
 hDMACopyFunc::
-    ds 15 ;??
+    ds 16 ;??
 
 hCPUStack::
-    ds 111 ;??
+    ds 110 ;??

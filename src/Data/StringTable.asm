@@ -1,5 +1,5 @@
+include "./src/Includes.inc"
 include "./src/General/Charmap.inc"
-include "./src/Core/Graphics/Graphics.inc"
 
 section "StringTable", rom0
 
