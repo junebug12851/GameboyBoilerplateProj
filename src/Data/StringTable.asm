@@ -1,5 +1,5 @@
-include "./src/Setup/Charmap.inc"
-include "./src/Engine/Graphics.inc"
+include "./src/General/Charmap.inc"
+include "./src/Core/Graphics/Graphics.inc"
 
 section "StringTable", rom0
 

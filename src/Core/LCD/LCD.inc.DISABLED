@@ -1,4 +1,4 @@
-include "./src/Setup/Hardware.inc"
+include "./src/General/Hardware.inc"
 
 ; Doesn't work at all in any way due to RGBDS bug
 ; Is a video in a certain mode

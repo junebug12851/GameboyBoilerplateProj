@@ -1,4 +1,4 @@
-include "./src/Setup/Misc.inc"
+include "./src/General/Misc.inc"
 
 section "Data", rom0
 

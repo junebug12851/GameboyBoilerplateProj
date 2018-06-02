@@ -1,5 +1,5 @@
-include "./src/Setup/Hardware.inc"
-include "./src/Home/Data.inc"
+include "./src/General/Hardware.inc"
+include "./src/Core/Data/Data.inc"
 
 ; Increments only upon breaking changes or changes that introduce compatibility requirements
 SRAMVersionU EQU $00

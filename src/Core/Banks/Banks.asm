@@ -1,6 +1,6 @@
-include "./src/Engine/Banks.inc"
-include "./src/Engine/MBC.inc"
-include "./src/Setup/Hardware.inc"
+include "./src/Core/Banks/Banks.inc"
+include "./src/Core/MBC/MBC.inc"
+include "./src/General/Hardware.inc"
 
 section "Banks", rom0
 

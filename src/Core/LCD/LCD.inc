@@ -1,4 +1,4 @@
-include "./src/Setup/Hardware.inc"
+include "./src/General/Hardware.inc"
 
 ; Other file was disabled, just too buggy both on it's on and
 ; largely because of RGBDS unavoidable persistent bugs

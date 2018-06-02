@@ -25,22 +25,22 @@
 if      !def(HARDWARE_INC)
 HARDWARE_INC  set  1
 
-include "./src/Setup/Hardware/MemoryMap.inc"
-include "./src/Setup/Hardware/MBC3.inc"
-include "./src/Setup/Hardware/OAM.inc"
+include "./src/General/Hardware/MemoryMap.inc"
+include "./src/General/Hardware/MBC3.inc"
+include "./src/General/Hardware/OAM.inc"
 
-include "./src/Setup/Hardware/Joypad.inc"
-include "./src/Setup/Hardware/Serial.inc"
-include "./src/Setup/Hardware/Timer.inc"
-include "./src/Setup/Hardware/Interrupts.inc"
-include "./src/Setup/Hardware/LCD.inc"
-include "./src/Setup/Hardware/WindowBG.inc"
+include "./src/General/Hardware/Joypad.inc"
+include "./src/General/Hardware/Serial.inc"
+include "./src/General/Hardware/Timer.inc"
+include "./src/General/Hardware/Interrupts.inc"
+include "./src/General/Hardware/LCD.inc"
+include "./src/General/Hardware/WindowBG.inc"
 
-include "./src/Setup/Hardware/Sound/SoundControl.inc"
-include "./src/Setup/Hardware/Sound/Sound1.inc"
-include "./src/Setup/Hardware/Sound/Sound2.inc"
-include "./src/Setup/Hardware/Sound/Sound3.inc"
+include "./src/General/Hardware/Sound/SoundControl.inc"
+include "./src/General/Hardware/Sound/Sound1.inc"
+include "./src/General/Hardware/Sound/Sound2.inc"
+include "./src/General/Hardware/Sound/Sound3.inc"
 
-include "./src/Setup/Hardware/Header.inc"
+include "./src/General/Hardware/Header.inc"
 
 endc

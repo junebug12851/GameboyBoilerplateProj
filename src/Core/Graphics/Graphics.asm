@@ -1,5 +1,5 @@
-include "./src/Engine/Graphics.inc"
-include "./src/Home/LCD.inc"
+include "./src/Core/Graphics/Graphics.inc"
+include "./src/Core/LCD/LCD.inc"
 
 section "graphics", rom0
 

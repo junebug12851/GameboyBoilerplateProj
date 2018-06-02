@@ -1,6 +1,6 @@
-include "./src/Engine/MBC.inc"
-include "./src/Home/Data.inc"
-include "./src/Setup/Misc.inc"
+include "./src/Core/MBC/MBC.inc"
+include "./src/Core/Data/Data.inc"
+include "./src/General/Misc.inc"
 
 section "MBC Engine", rom0
 

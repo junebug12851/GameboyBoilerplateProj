@@ -1,8 +1,8 @@
-include "./src/Engine/MBC.inc"
-include "./src/Setup/Hardware.inc"
-include "./src/Home/LCD.inc"
-include "./src/Home/Data.inc"
-include "./src/Engine/Graphics.inc"
+include "./src/Core/MBC/MBC.inc"
+include "./src/General/Hardware.inc"
+include "./src/Core/LCD/LCD.inc"
+include "./src/Core/Data/Data.inc"
+include "./src/Core/Graphics/Graphics.inc"
 
 section "Start", rom0
 

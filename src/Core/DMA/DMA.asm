@@ -1,5 +1,5 @@
-include "./src/Setup/Hardware.inc"
-include "./src/Home/Data.inc"
+include "./src/General/Hardware.inc"
+include "./src/Core/Data/Data.inc"
 
 section "DMA", rom0
 DMAInstall::
