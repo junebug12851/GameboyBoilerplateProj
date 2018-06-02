@@ -1,3 +1,5 @@
+include "./src/Includes.inc"
+
 section "RST Handlers", rom0
 
 rst00::

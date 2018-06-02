@@ -1,5 +1,4 @@
-include "./src/Core/Graphics/Graphics.inc"
-include "./src/Core/LCD/LCD.inc"
+include "./src/Includes.inc"
 
 section "graphics", rom0
 

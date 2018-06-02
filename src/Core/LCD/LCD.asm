@@ -1,4 +1,4 @@
-include "./src/Core/LCD/LCD.inc"
+include "./src/Includes.inc"
 
 section "LCD", rom0
 

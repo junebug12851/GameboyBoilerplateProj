@@ -1,5 +1,7 @@
-include "./src/General/Hardware.inc"
-include "./src/Core/Data/Data.inc"
+if      !def(CORE_MBC_INC)
+CORE_MBC_INC  set  1
+
+include "./src/Includes.inc"
 
 ; Increments only upon breaking changes or changes that introduce compatibility requirements
 SRAMVersionU EQU $00
@@ -213,3 +215,5 @@ endm
 mbc_updatever: macro
     call MBCUpdateRamVersion
 endm
+
+endc

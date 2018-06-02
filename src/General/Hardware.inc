@@ -22,8 +22,8 @@
 ;* Rev 2.5 -           : Fixed bug in CART defines
 ;* Rev 2.6 -           : Corrected and fixed several parts, broke apart
 
-if      !def(HARDWARE_INC)
-HARDWARE_INC  set  1
+if      !def(GENERAL_HARDWARE_INC)
+GENERAL_HARDWARE_INC  set  1
 
 include "./src/General/Hardware/MemoryMap.inc"
 include "./src/General/Hardware/MBC3.inc"

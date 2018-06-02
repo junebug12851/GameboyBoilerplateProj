@@ -1,5 +1,4 @@
-include "./src/Core/Joypad/Joypad.inc"
-include "./src/General/Hardware.inc"
+include "./src/Includes.inc"
 
 section "JoypadMngmt", rom0
 

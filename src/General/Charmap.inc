@@ -1,3 +1,6 @@
+if      !def(GENERAL_CHARMAP_INC)
+GENERAL_CHARMAP_INC  set  1
+
 ; Uppercase
 charmap "A", 1
 charmap "B", 2
@@ -107,3 +110,5 @@ charmap "▓", 97
 
 ; Empty
 charmap " ", 98
+
+endc

@@ -1,4 +1,7 @@
-include "./src/General/Hardware.inc"
+if      !def(CORE_LCD_INC)
+CORE_LCD_INC  set  1
+
+include "./src/Includes.inc"
 
 ; Other file was disabled, just too buggy both on it's on and
 ; largely because of RGBDS unavoidable persistent bugs
@@ -49,3 +52,5 @@ lcd:         macro
         call DisableLCD
     endc    
 endm
+
+endc

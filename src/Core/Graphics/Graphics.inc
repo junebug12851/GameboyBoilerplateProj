@@ -1,3 +1,8 @@
+if      !def(CORE_GRAPHICS_INC)
+CORE_GRAPHICS_INC  set  1
+
+include "./src/Includes.inc"
+
 ; Special Graphic Engine Commands
 
 GSTOP   EQU     $FF
@@ -56,3 +61,5 @@ printstr:      macro
     ld c, \4
     call PrintTilesAt
 endm
+
+endc

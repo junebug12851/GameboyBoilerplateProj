@@ -1,3 +1,8 @@
+if      !def(CORE_BANKS_INC)
+CORE_BANKS_INC  set  1
+
+include "./src/Includes.inc"
+
 ; Calls to rom bank 1+ from anywhere
 ; \1 label
 farcallrom:      macro
@@ -47,3 +52,5 @@ jpsram:    macro
     ld hl, \1
     jp JpSRam
 endm
+
+endc

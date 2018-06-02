@@ -1,5 +1,4 @@
-include "./src/General/Hardware.inc"
-include "./src/Core/Data/Data.inc"
+include "./src/Includes.inc"
 
 section "Memory", rom0
 

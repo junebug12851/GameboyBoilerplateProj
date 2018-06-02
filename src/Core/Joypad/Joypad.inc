@@ -1,3 +1,8 @@
+if      !def(CORE_JOYPAD_INC)
+CORE_JOYPAD_INC  set  1
+
+include "./src/Includes.inc"
+
 ; Wait for noise to clear on joypad
 debounce:   macro
     ld  a,[rJOY]		 ;takes a few cycles to get accurate reading
@@ -60,3 +65,5 @@ endm
 joypad_update:		macro
 	call ReadJoypad
 endm
+
+endc

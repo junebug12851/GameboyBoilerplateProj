@@ -1,8 +1,4 @@
-include "./src/Core/MBC/MBC.inc"
-include "./src/General/Hardware.inc"
-include "./src/Core/LCD/LCD.inc"
-include "./src/Core/Data/Data.inc"
-include "./src/Core/Graphics/Graphics.inc"
+include "./src/Includes.inc"
 
 section "Start", rom0
 

@@ -1,5 +1,7 @@
-if      !def(DATA_INC)
-DATA_INC  set  1
+if      !def(CORE_DATA_INC)
+CORE_DATA_INC  set  1
+
+include "./src/Includes.inc"
 
 ; Copies data
 ; \1 = from
