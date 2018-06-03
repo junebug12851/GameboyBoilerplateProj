@@ -20,7 +20,7 @@ timer:      macro
 
         ld [rTAC], a ; Save to timer disabling it
     endc
-endc
+endm
 
 ; Enables and sets the timer
 ; \1 = Speed 4, 16, 65, and 262
