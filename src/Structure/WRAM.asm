@@ -5,7 +5,14 @@ section "OAM Buffer", wram0[$C000]
 wOamBuffer::
     ds 4*40
 
+; Moving stack pointer down here to expand on it's memory
 section "WRAM", wram0
+
+; Because the stack pointer counts down instead of up, reverse it
+wStackPointerEnd::
+    ds 256
+wStackPointer::
+    ds 1 ; Just to have the stack pointer top sit on an empty byte and not a used byte
 
 ; Page of OAM data to load into OAM
 ; As a shortcut it contains the High Nibble Address Offset as the page number

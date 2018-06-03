@@ -4,7 +4,7 @@ section "Start", rom0
 
 Start::
 	di ; Ensure interrupts are globally disabled
-    ld  sp,$FFFE ; Set location of stack pointer
+    ld  sp, $FFFE ; Set temporary location of stack pointer
     lcd "off" ; Disable LCD Screen
 
     xor a ; Zero A
@@ -40,6 +40,9 @@ Start::
     ld [rLYC], a ; Set LYC compare to VBlank (For now, expanded later, disabled though)
     
     call WipeMemory ; Wipe all Memory
+    ld sp, wStackPointer ; Move stack pointer to cleaned up and larger memory section
+                         ; From 113 bytes to 256 bytes and expandable
+    fill _HRAM, 	_HRAM_SIZE, 	0 	; Clean up HRAM now that the SP has vacated it
     call MBCRunOnce ; Initialize MBC Controller and SRAM
 
     ld a, %11100100
