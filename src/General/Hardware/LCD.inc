@@ -62,7 +62,7 @@ STATF_LYCF          EQU %00000100 ; Coincidence Flag
 STATF_MODE_MASK     EQU %00000011
 STATF_HB            EQU %00000000 ; H-Blank
 STATF_VB            EQU %00000001 ; V-Blank
-STATF_BUSY          EQU %00000010 ; VRAM Busy
+STATF_BUSY          EQU %00000010
 STATF_LCD           EQU %00000011 ; OAM and VRAM Busy
 
 ; --

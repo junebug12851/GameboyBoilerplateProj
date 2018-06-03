@@ -5,7 +5,9 @@ section "Start", rom0
 Start::
 	di ; Ensure interrupts are globally disabled
     ld  sp, $FFFE ; Set temporary location of stack pointer
-    lcd "off" ; Disable LCD Screen
+
+    wait_di "vblank" ; Wait for VBlank
+    lcd_power "off" ; Disable LCD Screen
 
     xor a ; Zero A
 
@@ -51,13 +53,13 @@ Start::
     ; Copy Font into Tile Data
 	copy Tileset1, vTileset1, Tileset1End - Tileset1
 
-    ; BG On
-    ; Window & Sprites Off
-	; 8x8 Tiles
-	; BG and Window share Tilemap Data $9800
-	; BG Data at $8000-$8FFF
-    ld  a,LCDCF_OFF | LCDCF_WIN9800 | LCDCF_WINOFF | LCDCF_TD8000 | LCDCF_BG9800 | LCDCF_OBJ8 | LCDCF_OBJOFF | LCDCF_BGON
-	ldh [rLCDC],a
+    background "on"
+    background "map 0" ; Enable background and switch it to map 0 ($9800)
+    window "off"
+    window "map 0" ; Disable window but prepare it to same map 
+    sprites "off"
+    sprites "8x8" ; Disable sprites but prepare them to be 8x8
+    tiledata 0 ; Use tiledata 0 ($8000)
 
     ; Print Gameboy boiler plate project centered horizontally and vertically
 	printstr GameBoyStr, 			_MAP0, 	(17/2) - 1, 	(20/2) - (16/2)
@@ -66,7 +68,7 @@ Start::
 
     call DMAInstall    ;Install DMA to HRAM (also initiates first run)
 
-    lcd "on"
+    lcd_power "on"
     ei ; Turn on LCD and Enable interrupts
 
     jp GameLoop

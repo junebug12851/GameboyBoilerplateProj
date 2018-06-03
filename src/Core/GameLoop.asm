@@ -2,7 +2,7 @@ include "./src/Includes.inc"
 
 section "GameLoop", rom0
 GameLoop::
-	wait_vblank
+	wait "vblank"
 
 	joypad_update
 	dma_copy
