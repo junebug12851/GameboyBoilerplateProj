@@ -10,6 +10,7 @@ section "iTimer",  rom0 [$50]
 
 section "iSerial", rom0 [$58]
 	jp Serial
-	
+
+; Unused and really shouldn't be used
 section "iJoypad", rom0 [$60]
 	jp Joypad

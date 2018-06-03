@@ -14,6 +14,7 @@ Timer::
 
 Serial::
 	reti
-	
+
+; Unused and really shouldn't be used
 Joypad::
     reti
