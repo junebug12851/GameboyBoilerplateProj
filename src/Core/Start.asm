@@ -19,16 +19,7 @@ Start::
     ld a, 7
     ld [rWX], a ; Reset window placement
 
-    ; Timer Setup
-    ld a, 0
-    ld [rDIV], a
-    ld [rTIMA], a ; Reset Divider and current timer count
-
-    ld a, 0
-    ld [rTMA], a ; Enable full timer (counts from 0-255 before triggering interrupt)
-
-    ld a, TACF_START | TACF_4KHZ
-    ld [rTAC], a ; Enable timer to count at 4KHz from 0 - 255 before triggering timer interrupt
+    set_timer 4, 0 ; Enable timer to count at 4KHz from 0 - 255 before triggering timer interrupt
 
     ld a, IEF_SERIAL | IEF_TIMER | IEF_LCDC | IEF_VBLANK
     ld [rIE], a ; Enable Serial, Timer, LCDC, and VBlank Interrupts
