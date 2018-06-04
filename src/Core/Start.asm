@@ -3,6 +3,8 @@ include "./src/Includes.inc"
 section "Start", rom0
 
 Start::
+    call RunBootAnimation
+
 	di ; Ensure interrupts are globally disabled
     ld  sp, $FFFE ; Set temporary location of stack pointer
 
