@@ -66,7 +66,7 @@ aspects of MBC to large stuff like formatting and initializing the SRAM.
 
 * Various code for a basic game loop, dma routine that installs in HRAM,
 LCD code, joypad code, memory code like formatting memory, and startup code.
-It also contains a lot of constants and such to make things easier.
+It also contains a lot of constants and macros to make things easier.
 
 * Initial structuring of the memory and ROM
 
@@ -74,6 +74,15 @@ It also contains a lot of constants and such to make things easier.
 A-Z, a-z, 0-9, several symbols, and a few ascii art symbols. I based the 
 letters and numbers off some open and free references I found however I 
 did draw them. The symbols and ascii art was entirely done from scratch.
+
+* Full Interrupt Implementation including HBlank, LCDC, LYC, Serial, Timer,
+and of course VBlank. There's also smart DMA copying / Joypad updating making
+use of the interrupt system.
+
+* Comprehensive joypad code with macros simplifying all aspects of it
+
+* Timer functionality in 1/17th seconds, 0.25 seconds, seconds, minutes, 
+hours, and days to add code into.
 
 ### Optimizations and Some extra features
 
