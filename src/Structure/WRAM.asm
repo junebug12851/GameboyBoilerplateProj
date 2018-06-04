@@ -39,3 +39,43 @@ wClock::
 ; 1 = Yes, 0 = No
 wSRAMForm::
     ds 1
+
+; Last Interrupt code
+; 0 = HBlank
+; 1 = VBlank
+; 2 = Timer
+; 3 = Serial
+; 4 = LYC
+; 5 = Joypad
+wLastInterrupt::
+    ds 1
+
+; Counts every 1/17 of a second
+; from 251 to 255 (4 times = ~.25 seconds)
+wTimerCount::
+    ds 1
+
+; Counts every quarter of a second
+; from 251 to 255 (4 times = ~1 second)
+wTimerQuartSec::
+    ds 1
+
+; Counts every second
+; from 195 to 255 (60 times = ~1 minute)
+wTimerS::
+    ds 1
+
+; Counts every minute
+; from 195 to 255 (60 times = ~1 hour)
+wTimerM::
+    ds 1
+
+; Counts every hour
+; from 231 to 255 (24 times = ~1 day)
+wTimerH::
+    ds 1
+
+; Counts every day
+; from 0 to 255
+wTimerD::
+    ds 1

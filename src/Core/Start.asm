@@ -50,6 +50,22 @@ Start::
 
     mbc_select "rom", 1 ; Select External ROM Bank 1
 
+    ; Init timers
+    ld a, TIMER_TMA
+    ld [wTimerCount], a
+
+    ld a, TIMER_QUART_SECOND_TMA
+    ld [wTimerQuartSec], a
+
+    ld a, TIMER_SECOND_TMA
+    ld [wTimerS], a
+
+    ld a, TIMER_MINUTE_TMA
+    ld [wTimerM], a
+
+    ld a, TIMER_HOUR_TMA
+    ld [wTimerH], a
+
     ; Copy Font into Tile Data
 	copy Tileset1, vTileset1, Tileset1End - Tileset1
 

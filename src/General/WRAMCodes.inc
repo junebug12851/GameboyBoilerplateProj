@@ -1,0 +1,18 @@
+if      !def(GENERAL_WRAM_CODES_INC)
+GENERAL_WRAM_CODES_INC  set  1
+
+HBLANK_INTERRUPT_CODE   equ 0
+VBLANK_INTERRUPT_CODE   equ 1
+TIMER_INTERRUPT_CODE    equ 2
+SERIAL_INTERRUPT_CODE   equ 3
+LYC_INTERRUPT_CODE      equ 4
+JOYPAD_INTERRUPT_CODE   equ 5
+
+TIMER_TMA               equ 255-4
+TIMER_QUART_SECOND_TMA  equ 255-4
+TIMER_SECOND_TMA        equ 255-60
+TIMER_MINUTE_TMA        equ 255-60
+TIMER_HOUR_TMA          equ 255-24
+;TIMER_DAY_TMA           equ 0 ; No point in being used since 0
+
+endc

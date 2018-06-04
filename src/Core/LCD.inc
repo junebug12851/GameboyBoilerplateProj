@@ -150,13 +150,18 @@ endm
 ; 1 is VBlank - Safe to do just about any changes anywhere
 ; 2 is OAM Busy, VBlank Free
 ; 3 is OAM Busy, VBlank Busy 
-; 4 is LCD Off
+; 4 is LCD Off (Only on non-compact version)
+; Skips lcd power check
+which_vmode_compact:    macro
+    ld a, [rSTAT]
+    and STATF_MODE_MASK
+endm
+
 which_vmode:        macro
     is_lcd_on
     jr z, .endLCDOff\@ ; End in VBlank if it is
 
-    ld a, [rSTAT]
-    and STATF_MODE_MASK
+    which_vmode_compact
     jr .end\@ ; Otherwise whatever mode LCD reports
 
 .endLCDOff\@
