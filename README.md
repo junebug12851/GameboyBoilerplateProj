@@ -55,16 +55,16 @@ I chose MBC5 for a few reasons
 
 1. It has a good amount of ROM and External RAM memory
 2. It provides external RAM ~_^ which I love
-4. Some issues with earlier MBC controllers like 3 unusable banks are all fixed
-5. It's extremely well documented and known
-6. It certified to work fully and accurately with the GBC
+3. Some issues with earlier MBC controllers like 3 unusable banks are all fixed
+4. It's extremely well documented and known
+5. It certified to work fully and accurately with the GBC
 
 There are better ones out there, some I'd love to use, but documentation
 is scarce, implementation is poor and/or theres awesome features that are 
 missing. MBC5 I find is the best middle ground.
 
 Note: Version 1 Used an MBC3 for the timer but after careful re-consideration
-I've moved to MBC5 for points 1 and 6 mentioned above.
+I've moved to MBC5 for points 1 and 5 mentioned above.
 
 ### What's in it so far
 
