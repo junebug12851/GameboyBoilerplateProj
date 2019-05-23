@@ -2,10 +2,9 @@ include "./src/Includes.inc"
 
 section "Banks", rom0
 
-; This game uses Memory Bank Controller 3
-; 128 ROM Banks (2MB)
-; 4 RAM Banks (32KB)
-; RTC Clock
+; This game uses Memory Bank Controller 5
+; 512 ROM Banks (8MB)
+; 16 RAM Banks (128KB)
 
 ; Makes a call from anywhere to rom bank1+ and back
 ; given your calling from the non-home bank

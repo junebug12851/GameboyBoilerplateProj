@@ -15,21 +15,21 @@ find ./build -iname '*.z80' -exec rgbasm -o {}.obj {} \;
 
 # Output as gameboy file with debug map and symbols
 # -d                        Original Gameboy only, disable color features
-# -p 0xFF                   Pad Value (FF = RST 38H as Epic Crash Debugging)
-find ./build -iname '*.obj' -exec rgblink -d -p 0xFF -m ./build/game.map -n ./build/game.sym -o ./build/game.gb {} +
+# -p 0xCB                   Pad Value (CB = Results in Needed Crash when CPU Derailed)
+find ./build -iname '*.obj' -exec rgblink -d -p 0xCB -m ./build/game.map -n ./build/game.sym -o ./build/game.gb {} +
 
 # Fix to proper ROM
-# -c                        Color Support but not for Color
+# -C                        Only for regular Gameboy
 # -f lhg                    Add in the Nintendo Logo, Header Checksum, and Global Checksum
 # -i PROJ                   Set Game UID as PROJ
 # -j                        Game made outside of japan
-# -k 00                   2 digit license string (00 = Sandbox/Unlincensed)
-# -m 0x10                   MBC code (10 = MBC3 + Timer + RAM + Battery)
-# -n 0x00                   Rom Version 0
-# -r 0x03                   RAM Size (0x03 = 32KB)
+# -k 00                     2 digit license string (00 = Sandbox/Unlincensed)
+# -m 0x1B                   MBC code (1B = MBC5 + RAM + Battery)
+# -n 0x02                   Rom Version 2
+# -r 0x04                   RAM Size (0x04 = 128KB)
 # -t "BOILERPLATEPROJ"      ROM Title 15 Chars
-# -p 0xFF                   Pad Value (FF = RST 38H as Epic Crash Debugging)
+# -p 0xCB                   Pad Value (CB = Results in Needed Crash when CPU Derailed)
 
-rgbfix -c -f lhg -i PROJ -j -k 00 -m 0x10 -n 0x00 -r 0x03 -t "BOILERPLATEPROJ" -p 0xFF ./build/game.gb
+rgbfix -C -f lhg -i PROJ -j -k 00 -m 0x1B -n 0x02 -r 0x04 -t "BOILERPLATEPROJ" -p 0xCB ./build/game.gb
 
 echo "Completed building"

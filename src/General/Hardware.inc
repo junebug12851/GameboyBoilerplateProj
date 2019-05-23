@@ -26,7 +26,7 @@ if      !def(GENERAL_HARDWARE_INC)
 GENERAL_HARDWARE_INC  set  1
 
 include "./src/General/Hardware/MemoryMap.inc"
-include "./src/General/Hardware/MBC3.inc"
+include "./src/General/Hardware/MBC5.inc"
 include "./src/General/Hardware/OAM.inc"
 
 include "./src/General/Hardware/Joypad.inc"

@@ -15,7 +15,7 @@ mbc_wait:     macro
     nop
 endm
 
-; Powers on or off External RAM and RTC Clock
+; Powers on or off External RAM
 ; Turn off as soon as done
 ; \1 = on or off
 mbc_power:   macro
@@ -23,12 +23,12 @@ mbc_power:   macro
     push hl
 
     if \1 == "on"
-        ld a, MBC3_EN_RAM_CODE
+        ld a, MBC5_EN_RAM_CODE
     else
-        ld a, MBC3_DIS_RAM_CODE
+        ld a, MBC5_DIS_RAM_CODE
     endc
 
-    ld hl, MBC3_ENABLE_RAM
+    ld hl, MBC5_ENABLE_RAM
     ld [hl], a ; Give power on code
 
     pop hl
@@ -36,92 +36,53 @@ mbc_power:   macro
 endm
 
 ; Select external ROM bank
-; 0x01-0x7F
-; \1 = ROM Bank Number or "runtime" (Use register a instead)
+; 0x01-0x1FF
+; \1 = ROM Bank Number or "runtime" (Use register bc instead)
 mbc_selectrom:   macro
-    push af
+    push bc
     push hl
 
     if \1 != "runtime"
-        ld a, \1
+        ld bc, \1
     endc
 
-    ld hl, MBC3_ROM_SELECT
-    ld [hl], a ; Switch external ROM bank
+    ld hl, MBC5_LOW_ROM_SELECT
+    ld [hl], c ; Switch external ROM bank
+
+    ld hl, MBC5_HGH_ROM_SELECT
+    ld [hl], b ; Switch external ROM bank
 
     pop hl
-    pop af
+    pop bc
 endm
 
 ; Select external RAM bank
-; 0x00-0x03
+; 0x00-0x0F
 ; \1 = RAM Bank Number or "runtime" (Use register a instead)
 mbc_selectram:   macro
-    push af
+    push bc
     push hl
 
     if \1 != "runtime"
-        ld a, \1
+        ld b, \1
     endc
 
-    ld hl, MBC3_RAM_SELECT
-    ld [hl], a ; Switch external RAM bank
+    ld hl, MBC5_RAM_SELECT
+    ld [hl], b ; Switch external RAM bank
 
     pop hl
-    pop af
-endm
-
-; Selects an RTC register in MBC
-; \1 = register name
-;       "s", "m", "h", "dl", "du"
-mbc_selectrtc:      macro
-    if \1 == "s"
-        mbc_selectram MBC3_RTC_S_BNK
-    elif \1 == "m"
-        mbc_selectram MBC3_RTC_M_BNK
-    elif \1 == "h"
-        mbc_selectram MBC3_RTC_H_BNK
-    elif \1 == "dl"
-        mbc_selectram MBC3_RTC_DL_BNK
-    elif \1 == "du"
-        mbc_selectram MBC3_RTC_DU_BNK
-    endc
-
-    mbc_wait
+    pop bc
 endm
 
 ; Performs one of 3 MBC Selects
-; \1 = "rom", "ram", or "rtc"
+; \1 = "rom" or "ram"
 ; \2 = arg to mbc_select <check specific macro>
 mbc_select:         macro
     if \1 == "rom"
         mbc_selectrom \2
     elif \1 == "ram"
         mbc_selectram \2
-    elif \1 == "rtc"
-        mbc_selectrtc \2
     endc
-endm
-
-; Latch new RTC Data
-mbc_latchrtc:        macro
-    push af
-    push hl
-
-    ld a, MBC3_LATCH_CODE_1
-    ld hl, MBC3_RTC_LATCH
-    ld [hl], a ; 1st step in latching new RTC
-
-    mbc_wait ; Give it 4 cycles to kick in
-
-    ld a, MBC3_LATCH_CODE_2
-    ld hl, MBC3_RTC_LATCH
-    ld [hl], a ; 2nd step in latching
-
-    mbc_wait ; Give it 4 cycles to kick in
-
-    pop hl
-    pop af
 endm
 
 ; Copies to or from an MBC Bank
@@ -203,14 +164,6 @@ mbc_byte:        MACRO
 endm
 
 ; Becuase it's prettier
-
-mbc_getrtc: macro
-    call MBCGetRTC
-endm
-
-mbc_setrtc: macro
-    call MBCSetRTC
-endm
 
 mbc_updatever: macro
     call MBCUpdateRamVersion

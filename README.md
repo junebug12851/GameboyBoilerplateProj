@@ -46,23 +46,25 @@ be molded pretty easily to the later models and such.
 
 ### What cartridge does it run on?
 
-It uses an MBC3 cartridge that has 
+Version 2 uses an MBC5 cartridge that has 
 
-* 128 ROM Banks (2MB)
-* 4 RAM Banks (32KB)
-* RTC Clock
+* 512 ROM Banks (8MB)
+* 16 RAM Banks (128KB)
 
-I chose MBC3 for a few reasons
+I chose MBC5 for a few reasons
 
 1. It has a good amount of ROM and External RAM memory
 2. It provides external RAM ~_^ which I love
-3. It has a clock
 4. Some issues with earlier MBC controllers like 3 unusable banks are all fixed
 5. It's extremely well documented and known
+6. It certified to work fully and accurately with the GBC
 
 There are better ones out there, some I'd love to use, but documentation
 is scarce, implementation is poor and/or theres awesome features that are 
-missing. MBC3 I find is the best middle ground.
+missing. MBC5 I find is the best middle ground.
+
+Note: Version 1 Used an MBC3 for the timer but after careful re-consideration
+I've moved to MBC5 for points 1 and 6 mentioned above.
 
 ### What's in it so far
 

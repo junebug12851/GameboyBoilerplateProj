@@ -9,88 +9,9 @@ SRAMSig::
     db $CA,$FE,$BA,$BE,$F1,$EE,$DE,$CF,$FE,$ED
 SRAMSigEnd::
 
-; This game uses Memory Bank Controller 3
-; 128 ROM Banks (2MB)
-; 4 RAM Banks (32KB)
-; RTC Clock
-
-; Gets RTC Data
-MBCGetRTC::
-    ld hl, _SRAM ; Load RTC Clock Read Address
-    ld de, wClock ; Load Save address
-
-    mbc_power "on"
-    mbc_latchrtc ; Power on and latch new data
-
-    mbc_select "rtc", "s"
-    ld a, [hl]
-    ld [de], a
-    inc de ; Save seconds to byte 1
-
-    mbc_select "rtc", "m"
-    ld a, [hl]
-    ld [de], a
-    inc de ; Save minutes to byte 2
-
-    mbc_select "rtc", "h"
-    ld a, [hl]
-    ld [de], a
-    inc de ; Save hours to byte 3
-
-    mbc_select "rtc", "dl"
-    ld a, [hl]
-    ld [de], a
-    inc de ; Save 8 of 9 day bits to byte 4
-
-    mbc_select "rtc", "du"
-    ld a, [hl]
-    ld [de], a ; Save 9th day bit and flags to byte 5
-
-    mbc_power "off" ; Power off
-    ret
-
-; Updates RTC Clock with data from wClock
-MBCSetRTC::
-    ld hl, wClock
-    ld de, _SRAM
-
-    mbc_power "on"
-    mbc_latchrtc ; Power on and latch new data
-
-    mbc_select "rtc", "du"
-    ld a, [de]
-    set MBC3_RTC_DUB_HALT, a
-    ld [de], a ; Before changing the RTC clock we have to stop it first
-    mbc_wait
-
-    mbc_select "rtc", "s"
-    ld a, [hli]
-    ld [de], a
-    mbc_wait
-
-    mbc_select "rtc", "m"
-    ld a, [hli]
-    ld [de], a
-    mbc_wait
-
-    mbc_select "rtc", "h"
-    ld a, [hli]
-    ld [de], a
-    mbc_wait
-
-    mbc_select "rtc", "dl"
-    ld a, [hli]
-    ld [de], a
-    mbc_wait
-
-    mbc_select "rtc", "du"
-    ld a, [hli]
-    res MBC3_RTC_DUB_HALT, a ; Re-enable clock also
-    ld [de], a
-    mbc_wait
-
-    mbc_power "off"
-    ret
+; This game uses Memory Bank Controller 5
+; 512 ROM Banks (8MB)
+; 16 RAM Banks (128KB)
 
 ; Formats the RAM if it needs formatting
 ; A=1 if formatting was needed
@@ -117,17 +38,101 @@ MBCRamFormat::
 
     mbc_select "ram", 0 ; Remember this is also an external function
     fill _SRAM, _SRAM_SIZE, 0
+    ld hl, sBank0No
+    ld a, 0
+    ld [hl], a
 
     mbc_select "ram", 1
     fill _SRAM, _SRAM_SIZE, 0
+    ld hl, sBank1No
+    ld a, 1
+    ld [hl], a
 
     mbc_select "ram", 2
     fill _SRAM, _SRAM_SIZE, 0
+    ld hl, sBank2No
+    ld a, 2
+    ld [hl], a
 
     mbc_select "ram", 3
     fill _SRAM, _SRAM_SIZE, 0
+    ld hl, sBank3No
+    ld a, 3
+    ld [hl], a
 
-    ; Formatted 32 KB of RAM
+    mbc_select "ram", 4
+    fill _SRAM, _SRAM_SIZE, 0
+    ld hl, sBank4No
+    ld a, 4
+    ld [hl], a
+
+    mbc_select "ram", 5
+    fill _SRAM, _SRAM_SIZE, 0
+    ld hl, sBank5No
+    ld a, 5
+    ld [hl], a
+
+    mbc_select "ram", 6
+    fill _SRAM, _SRAM_SIZE, 0
+    ld hl, sBank6No
+    ld a, 6
+    ld [hl], a
+
+    mbc_select "ram", 7
+    fill _SRAM, _SRAM_SIZE, 0
+    ld hl, sBank7No
+    ld a, 7
+    ld [hl], a
+
+    mbc_select "ram", 8
+    fill _SRAM, _SRAM_SIZE, 0
+    ld hl, sBank8No
+    ld a, 8
+    ld [hl], a
+
+    mbc_select "ram", 9
+    fill _SRAM, _SRAM_SIZE, 0
+    ld hl, sBank9No
+    ld a, 9
+    ld [hl], a
+
+    mbc_select "ram", 10
+    fill _SRAM, _SRAM_SIZE, 0
+    ld hl, sBank10No
+    ld a, 10
+    ld [hl], a
+
+    mbc_select "ram", 11
+    fill _SRAM, _SRAM_SIZE, 0
+    ld hl, sBank11No
+    ld a, 11
+    ld [hl], a
+
+    mbc_select "ram", 12
+    fill _SRAM, _SRAM_SIZE, 0
+    ld hl, sBank12No
+    ld a, 12
+    ld [hl], a
+
+    mbc_select "ram", 13
+    fill _SRAM, _SRAM_SIZE, 0
+    ld hl, sBank13No
+    ld a, 13
+    ld [hl], a
+
+    mbc_select "ram", 14
+    fill _SRAM, _SRAM_SIZE, 0
+    ld hl, sBank14No
+    ld a, 14
+    ld [hl], a
+
+    mbc_select "ram", 15
+    fill _SRAM, _SRAM_SIZE, 0
+    ld hl, sBank15No
+    ld a, 15
+    ld [hl], a
+
+    ; Formatted 128 KB of RAM
     ; Now initial setup the RAM
 
     mbc_select "ram", 0
@@ -138,34 +143,6 @@ MBCRamFormat::
     ; This code adds the ram bank number to the first byte of each
     ; ram bank whcih is used in a number of code points as an easy
     ; and efficient optimization. The same is also done for the ROM
-
-    ; MBCUpdateRamVersion is a function to be called from the outside
-    ; it cleans up after itself and shuts down RAM, we need to boot
-    ; RAM back up
-    mbc_power "on"
-    mbc_select "ram", 0
-
-    ld hl, sBank0No
-    ld a, 0
-    ld [hl], a
-
-    mbc_select "ram", 1
-
-    ld hl, sBank1No
-    ld a, 1
-    ld [hl], a
-
-    mbc_select "ram", 2
-
-    ld hl, sBank2No
-    ld a, 2
-    ld [hl], a
-
-    mbc_select "ram", 3
-
-    ld hl, sBank3No
-    ld a, 3
-    ld [hl], a
 
     ; Shutdown RAM since we're done with RAM setup
 

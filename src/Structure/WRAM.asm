@@ -27,14 +27,6 @@ wJoyDown::
 wJoyUp::
     ds 1
 
-; 5 clock bytes directly from the RTC clock
-; Seconds, Minutes, Hours, DaysL (Bits 8 of 9), DaysU (Bits 9 of 9 + Flags)
-; DaysU Flags
-;       Bit 6 - Halt status (Auto Set on Clock Update)
-;       Bit 7 - Day carry
-wClock::
-    ds 5
-
 ; Did the SRAM have to be formatted this time around?
 ; 1 = Yes, 0 = No
 wSRAMForm::
