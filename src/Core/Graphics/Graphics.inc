@@ -6,6 +6,8 @@ include "./src/Includes.inc"
 ; Special Graphic Engine Commands
 
 GSTOP   EQU     $FF
+GNEXT   EQU     $FE
+GEND    EQU     $FD
 
 ; Convers Y, X coords to address offset and adds them to base address
 ; \1 = Y
@@ -60,6 +62,19 @@ printstr:      macro
     ld b, \3
     ld c, \4
     call PrintTilesAt
+endm
+
+; Prints tilemap to screen coords
+; \1 = TileMap Address
+; \2 = To Address
+; \3 = Y
+; \4 = X
+printmap:       macro
+    ld hl, \1
+    ld de, \2
+    ld b, \3
+    ld c, \4
+    call PrintTileMap
 endm
 
 endc

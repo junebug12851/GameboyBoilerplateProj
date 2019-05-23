@@ -71,3 +71,59 @@ PrintTilesAt::
     call CoordToAddr
     call PrintTiles
     ret
+
+; Prints a tilemap to screen at specified coordinate
+; A tilemap is simply tile numbers followed by a GSTOP on each line
+; and fully terminated with a GEND. They can be copied to any location
+; and align left on each line down to the starting pos
+;
+; hl    Tile Map Data
+; b     Y Coord
+; c     X Coord
+; de    Destination Address
+PrintTileMap::
+    ld hl, ScreenMain
+    ld b, 0
+    ld c, 0
+    ld de, _MAP0
+
+.loop
+    call PrintTiles
+
+    ld a, [hl]
+    cp GEND
+    jr z, .end
+
+    ld a, b
+    inc a
+    ld b, a
+    ld c, 0
+    ld de, _MAP0
+    push bc
+    call CoordToAddr
+    pop bc
+    jr .loop
+
+.end
+    ret
+
+; PrintTileMap::
+;     call CoordToAddr
+
+; .continue
+;     call PrintTiles
+    
+;     push bc
+;     ld bc, $20
+;     add de, bc
+;     pop bc
+
+;     ld a, GEND
+;     cp [hl]
+;     jr z, .done
+
+;     inc b
+;     jr .continue
+
+; .done
+;     ret

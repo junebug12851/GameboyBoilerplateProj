@@ -1,11 +1,23 @@
-![Project Thumbnail](https://i.imgur.com/uepjEGa.png)
+![Project Thumbnail](https://i.imgur.com/q7Lt2YP.png)
+
+## Version 2 Notice
+
+Version 2 is starting to rollout and updates will be slow. It's initial rollout
+consists only of a new graphic features, tilemap printing, which makes the image
+above much easier to achieve.
+
+Apart from cosmetics, version 2 will tackle a bigger problem as it develops which
+is wasted CPU cycles and code bloating from version 1. Until verson 2 is complete
+enjoy it's new graphic feature, tilemap printing, and future updates as they happen.
+
+Additionally it now auto-converts standard png images to tiledata directly and back
+making development far easier, universal, and more fun.
 
 ## Gameboy Boilerplate Project
 There are a million ways to program for the Gameboy, here I provide
 a boilerplate assembly project that I like which is commented and 
-documented throughout to get you off the ground. I also include a 
-tileset I made which includes English upper and lower case letters, 
-numbers, and several symbols including 2 or 3 ascii art characters.
+documented throughout to get you off the ground. I also include a revised
+tileset I made which includes many ascii and extended ascii characters.
 
 There have been lots of starter stuff I've seen but many were poorly 
 documented, often very incomplete and very basic to the point where it's

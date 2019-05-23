@@ -7,6 +7,7 @@ HelloWorldStr::
 	db "Hello World! ^_^;", GSTOP
 
 GameBoyStr::
+
 	db "▓▒░ Game Boy ░▒▓", GSTOP
 
 BoilerPlateProjectStr::

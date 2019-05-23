@@ -8,7 +8,8 @@ rm -Rf ./build/*
 # Copy source files over
 cp -R ./src/* ./build
 
-# Compile source files to object files
+# Compile source and image files individually
+find ./build -iname '*.png' -exec rgbgfx -f -o {}.2bpp {} \;
 find ./build -iname '*.asm' -exec rgbasm -o {}.obj {} \;
 find ./build -iname '*.z80' -exec rgbasm -o {}.obj {} \;
 

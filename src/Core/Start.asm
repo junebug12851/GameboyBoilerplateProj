@@ -3,8 +3,6 @@ include "./src/Includes.inc"
 section "Start", rom0
 
 Start::
-    call RunBootAnimation
-
 	di ; Ensure interrupts are globally disabled
     ld  sp, $FFFE ; Set temporary location of stack pointer
 
@@ -69,7 +67,7 @@ Start::
     ld [wTimerH], a
 
     ; Copy Font into Tile Data
-	copy Tileset1, vTileset1, Tileset1End - Tileset1
+	copy FontTileset, vTileset1, FontTilesetEnd - FontTileset
 
     background "on"
     background "map 0" ; Enable background and switch it to map 0 ($9800)
@@ -79,10 +77,8 @@ Start::
     sprites "8x8" ; Disable sprites but prepare them to be 8x8
     tiledata 0 ; Use tiledata 0 ($8000)
 
-    ; Print Gameboy boiler plate project centered horizontally and vertically
-	printstr GameBoyStr, 			_MAP0, 	(17/2) - 1, 	(20/2) - (16/2)
-	printstr BoilerPlateProjectStr, _MAP0, 	(17/2), 		(20/2) - (16/2)
-	printstr EmoticonStr, 			_MAP0, 	(17/2) + 2, 	(20/2) - (16/2)
+    ; Print Main Screen starting at UL corner of MAP 0
+    printmap ScreenMain, _MAP0, 0, 0
 
     call DMAInstall    ;Install DMA to HRAM (also initiates first run)
 
