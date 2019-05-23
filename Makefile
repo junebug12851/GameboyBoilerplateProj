@@ -63,6 +63,9 @@ OBJ_FILES := Core/Banks/Banks.obj \
              Structure/WRAM.obj
 OBJ_FILES := $(addprefix $(BUILD_DIR)/,$(OBJ_FILES))
 
+# -----------------------------------------------------------------------------
+# RULES
+
 #
 # default target is the ROM file
 #
@@ -82,15 +85,14 @@ MARKER_FILE := .marker
 MARKER = $$(@D)/$(MARKER_FILE)
 
 %/$(MARKER_FILE):
-	@echo "    [MKDIR] $(dir $@)"
+	@echo "MKDIR    $(dir $@)"
 	@mkdir -p $(dir $@)
 	@touch $@
 
 # =============================================================================
 
 #
-# this is a little jank but it should work for now
-# (TODO: maybe have the %.obj rules have all 2bpp targets as a dependency)
+# Tile dependencies
 #
 $(BUILD_DIR)/Data/Tilesets/Font/Font.tileset.obj: $(BUILD_DIR)/Data/Tilesets/Font/Font.tileset.png.2bpp
 
@@ -98,14 +100,14 @@ $(BUILD_DIR)/Data/Tilesets/Font/Font.tileset.obj: $(BUILD_DIR)/Data/Tilesets/Fon
 # Pattern rule for assembly source to an object file
 #
 $(BUILD_DIR)/%.obj: $(SRC_DIR)/%.asm $(MARKER)
-	@echo "    [ASM]  $@"
+	@echo "ASM      $@"
 	@$(RGBASM) $(ASM_FLAGS) -o $@ $<
 
 #
 # Same as above except for *.z80 files
 #
 $(BUILD_DIR)/%.obj: $(SRC_DIR)/%.z80 $(MARKER)
-	@echo "    [ASM]  $@"
+	@echo "ASM      $@"
 	@$(RGBASM) $(ASM_FLAGS) -o $@ $<
 
 #
@@ -113,13 +115,13 @@ $(BUILD_DIR)/%.obj: $(SRC_DIR)/%.z80 $(MARKER)
 # (Note: I removed the '-f' option from the build script)
 #
 $(BUILD_DIR)/%.png.2bpp: $(SRC_DIR)/%.png $(MARKER)
-	@echo "    [GFX]  $@"
+	@echo "GFX      $@"
 	@$(RGBGFX) -o $@ $<
 
 $(ROM_GB): $(OBJ_FILES)
-	@echo "    [LINK] $@"
+	@echo "LINK     $@"
 	@$(RGBLINK) $(LINK_FLAGS) -o $@ $+
-	@echo "    [FIX]  $@"
+	@echo "FIX      $@"
 	@$(RGBFIX) $(FIX_FLAGS) $@
 
 #
