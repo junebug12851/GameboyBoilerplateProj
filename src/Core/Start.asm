@@ -2,53 +2,95 @@ include "./src/Includes.inc"
 
 section "Start", rom0
 
-Start::
-	di ; Ensure interrupts are globally disabled
-    ld  sp, $FFFE ; Set temporary location of stack pointer
+; Local macros for code cleanliness
+; It's a macro to save uneeded code jumping or stack usage
 
-    wait_di "vblank" ; Wait for VBlank
-    lcd_power "off" ; Disable LCD Screen
-
+; Init System "Settings"
+init_registers:     macro
     xor a ; Zero A
 
-    ld [rIF], a ; Clear Interrupt Reason Flags
+    ; Clear and Reset Several Registers and Flags
+    ld [rIF], a ; Interrupt Reason Flags
     ld [rSB], a
-    ld [rSC], a ; Clear Serial Transfer
+    ld [rSC], a ; Serial Transfer
     ld [rSCY], a
-    ld [rSCX], a ; Reset Background Scrolling
+    ld [rSCX], a ; Background Scrolling
 
+    ; Properly setup window placement
     ld [rWY], a
     ld a, 7
-    ld [rWX], a ; Reset window placement
+    ld [rWX], a
 
-    set_timer 4, 0 ; Enable timer to count at 4KHz from 0 - 255 before triggering timer interrupt
-
+    ; When interrupts are re-enabled at the end
+    ; We're only interested in Serial, Timer, LCDC, and VBlank Interrupts only
     ld a, IEF_SERIAL | IEF_TIMER | IEF_LCDC | IEF_VBLANK
-    ld [rIE], a ; Enable Serial, Timer, LCDC, and VBlank Interrupts
+    ld [rIE], a
 
+    ; We're also interested in H-Blank Interrupts
     ld a, STATF_SEL_MODE00
-    ld [rSTAT], a ; Enable LCDC interuptions for HBlank
+    ld [rSTAT], a
 
+    ; For now LYC Interrupts trigger on VBlank
     ld a, SCRN_Y
-    ld [rLYC], a ; Set LYC compare to VBlank (For now, expanded later, disabled though)
-    
-    call WipeMemory ; Wipe all Memory
-    ld sp, wStackPointer ; Move stack pointer to cleaned up and larger memory section
-                         ; From 113 bytes to 256 bytes and expandable
-    fill _HRAM, 	_HRAM_SIZE, 	0 	; Clean up HRAM now that the SP has vacated it
-    call MBCRunOnce ; Initialize MBC Controller and SRAM
+    ld [rLYC], a
 
+    ; Reset Palettes
+    ; 11    22      33      44
+    ; 1 = Color for Darkest Color
+    ; 4 = Color for Lightest Color
+    ;
+    ; The default is
+    ; 11    10      01      00
+    ; Keep that way for now
     ld a, %11100100
     ld [rBGP], a
     ld [rOBP0], a
     ld [rOBP1], a ; Reset Palettes
 
-    joypad_reset ; Reset Joypad
+    ; Enable ticking timer at 4KHz to count from 0-255
+    set_timer 4, 0
 
+     ; Enable background and switch it to map 0 ($9800)
+    background "on"
+    background "map 0"
+
+    ; Disable window but prepare it to same map 
+    window "off"
+    window "map 0"
+
+    ; Disable sprites but prepare them to be 8x8
+    sprites "off"
+    sprites "8x8"
+
+    ; Use tiledata 0 ($8000)
+    tiledata 0 
+endm
+
+; Wipe all memory and cartridge ram if needed and properly setup
+init_memory:    macro
+    ; Wipe All Internal Memory
+    wipe_memory
+
+    ; Move stack pointer to cleaned up and larger memory section
+    ; From 113 bytes to 256 bytes and expandable
+    ld sp, wStackPointer 
+
+    ; Clean up HRAM now that the SP has vacated it   
+    fill _HRAM, 	_HRAM_SIZE, 	0
+
+    ; Reset Joypad
+    joypad_reset
+
+    ; Init and Setup MBC Controller
+    ; Format Cart RAM if need be
+    mbc_init
+
+    ; Select External ROM Bank 1
+    mbc_select "rom", 1
+
+    ; Set OAM page to $C0
     ld a, $C0
-	ld [wOamPage], a ; Set OAM page to $C0
-
-    mbc_select "rom", 1 ; Select External ROM Bank 1
+	ld [wOamPage], a
 
     ; Init timers
     ld a, TIMER_TMA
@@ -68,21 +110,44 @@ Start::
 
     ; Copy Font into Tile Data
 	copy FontTileset, vTileset1, FontTilesetEnd - FontTileset
+endm
 
-    background "on"
-    background "map 0" ; Enable background and switch it to map 0 ($9800)
-    window "off"
-    window "map 0" ; Disable window but prepare it to same map 
-    sprites "off"
-    sprites "8x8" ; Disable sprites but prepare them to be 8x8
-    tiledata 0 ; Use tiledata 0 ($8000)
+; Initial setup of the Gameboy
+Start::
+    ; Disable Interrupts so we're left alone to initialize
+    ; everything in peace
+	di
+
+    ; Place the processor stack somewhere temporary
+    ; until we can setup things more
+    ld  sp, $FFFE
+
+    ; Wait for a VBlank meaning all memory is open
+    ; Since interupts are disabled this is a polling wait
+    wait_di "vblank"
+
+    ; Disable LCD Screen
+    ; This ensures everything remains uninterupted
+    ; and stays in a permanent V-Blank until re-enabled
+    lcd_power "off"
+
+    ; Format and Init all Memory
+    init_memory
+
+    ; Setup All System Registers
+    init_registers
+
+    ;Install DMA to HRAM (also initiates first run)
+    dma_install
 
     ; Print Main Screen starting at UL corner of MAP 0
     printmap ScreenMain, _MAP0, 0, 0
 
-    call DMAInstall    ;Install DMA to HRAM (also initiates first run)
-
+    ; Flip LCD back on
     lcd_power "on"
-    ei ; Turn on LCD and Enable interrupts
 
+    ; Re-Enable Interupts now that everything is properly setup
+    ei
+
+    ; We're done, begin game as usual
     jp GameLoop

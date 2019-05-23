@@ -169,4 +169,8 @@ mbc_updatever: macro
     call MBCUpdateRamVersion
 endm
 
+mbc_init: macro
+    call MBCRunOnce
+endm
+
 endc
