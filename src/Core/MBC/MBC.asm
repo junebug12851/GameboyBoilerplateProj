@@ -14,12 +14,10 @@ SRAMSigEnd::
 ; 16 RAM Banks (128KB)
 
 ; Formats the RAM if it needs formatting
-; A=1 if formatting was needed
-; A=0 if not
+; A=TRUE if formatting was needed
+; A=FALSE if not
 MBCRamAutoFormat::
-
-    mbc_power "on"
-    mbc_select "ram", 0 ; Power on and switch to RAM 0
+    mbc_select "ram", 0 ; Switch to RAM 0
 
     verify SRAMSig, sSignature, SRAMSigEnd - SRAMSig ; Very signature matches
 
@@ -27,15 +25,11 @@ MBCRamAutoFormat::
     jr nz, MBCRamFormat
 
     ; External RAM doesn't need formatting
-    mbc_power "off"
     ld a, FALSE
     ret
 
 ; Format Ram without checking if it needs formatting
 MBCRamFormat::
-
-    mbc_power "on"
-
     mbc_select "ram", 0 ; Remember this is also an external function
     fill _SRAM, _SRAM_SIZE, 0
     ld hl, sBank0No
@@ -144,14 +138,10 @@ MBCRamFormat::
     ; ram bank whcih is used in a number of code points as an easy
     ; and efficient optimization. The same is also done for the ROM
 
-    ; Shutdown RAM since we're done with RAM setup
-
-    mbc_power "off"
     ld a, 1
     ret
 
 MBCUpdateRamVersion::
-    mbc_power "on"
     mbc_select "ram", 0
 
     ld a, SRAMVersionU
@@ -161,7 +151,6 @@ MBCUpdateRamVersion::
     ld a, SRAMVersionL
     ld [de], a ; Update SRAM version
 
-    mbc_power "off"
     ret
 
 ; Initial checks, procedures, and whatnot
@@ -181,5 +170,5 @@ MBCRunOnce::
     ld [hl], a ; Was formatted
 
 .continue
-    mbc_updatever ; Update version on MBC RAM
+    call MBCUpdateRamVersion ; Update version on MBC RAM
     ret

@@ -106,24 +106,3 @@ PrintTileMap::
 
 .end
     ret
-
-; PrintTileMap::
-;     call CoordToAddr
-
-; .continue
-;     call PrintTiles
-    
-;     push bc
-;     ld bc, $20
-;     add de, bc
-;     pop bc
-
-;     ld a, GEND
-;     cp [hl]
-;     jr z, .done
-
-;     inc b
-;     jr .continue
-
-; .done
-;     ret

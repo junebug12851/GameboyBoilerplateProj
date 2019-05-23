@@ -68,6 +68,9 @@ endm
 
 ; Wipe all memory and cartridge ram if needed and properly setup
 init_memory:    macro
+    ; Power On Cartridge RAM
+    mbc_power "on"
+
     ; Wipe All Internal Memory
     wipe_memory
 
@@ -85,8 +88,21 @@ init_memory:    macro
     ; Format Cart RAM if need be
     mbc_init
 
-    ; Select External ROM Bank 1
+    ; Select ROM & RAM Bank 1
+
+    ; The Gameboy wants external RAM turned off whenever possible
+    ; to protect accidental data corruption on a power cycle
+    ; We use the RAM for both persistent and non-persistent data
+    ; Therefore we switch to a non-persistent data bank where we
+    ; don't care if this happens
+
+    ; Leaving it on saves precious clock cycles since we do intend
+    ; to use it for non-persistent data and don't need to keep turning
+    ; it on and off
+
+    ; Always ensure it's never on a persistent data bank when not needed
     mbc_select "rom", 1
+    mbc_select "ram", 1
 
     ; Set OAM page to $C0
     ld a, $C0
