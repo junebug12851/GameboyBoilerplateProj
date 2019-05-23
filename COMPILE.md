@@ -58,3 +58,27 @@ In the **Cygwin terminal**, enter these commands:
 To build:
 
 	./scripts/build.sh
+
+# Using the Makefile
+
+Note: rgbds must be installed and in your PATH
+
+The provided makefile is an alternative to the build script. Using make allows
+for incremental builds as opposed to rebuilding everything. The makefile should
+work with any system that has GNU Make installed (windows users will need to
+install a port or use mingw).
+
+Just run the make command in the top directory of the source tree
+```sh
+make
+```
+
+The default target is build/game.gb. When adding new assembly files, add its
+corresponding object file to the `OBJ_FILES` variable. The Makefile will only
+build these files.
+
+The build directory can be cleaned (for a complete rebuild) using the clean
+target:
+```sh
+make clean
+```
