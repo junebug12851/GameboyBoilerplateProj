@@ -3,7 +3,7 @@
 ## Version 2 Notice
 
 Version 2 is starting to rollout and updates will be slow. It's initial rollout
-consists only of a new graphic features, tilemap printing, which makes the image
+consists only of a new graphic feature, tilemap printing, which makes the image
 above much easier to achieve.
 
 Apart from cosmetics, version 2 will tackle a bigger problem as it develops which
@@ -84,10 +84,10 @@ It also contains a lot of constants and macros to make things easier.
 
 * Initial structuring of the memory and ROM
 
-* A sample tileset I made that I might expand on later containing 
-A-Z, a-z, 0-9, several symbols, and a few ascii art symbols. I based the 
-letters and numbers off some open and free references I found however I 
-did draw them. The symbols and ascii art was entirely done from scratch.
+* A newly revised sample tileset I made which contains many ascii and extended
+ascii characters. The fontset was entirely created by me and is a great 
+improvement over the first version. It's licensed CC-BY for anyone to use
+in any project with attribution.
 
 * Full Interrupt Implementation including HBlank, LCDC, LYC, Serial, Timer,
 and of course VBlank. There's also smart DMA copying / Joypad updating making
@@ -127,6 +127,7 @@ totally be ignored or removed with ease.
 
 All your answers are in the COMPILE.md file from what to install, how and where 
 to get it, to compiling. The super short version though is use `rgbds` and run
-`./scripts/build.sh` any more elaboration can all be found in the seperate file.
+`./scripts/build.sh` any more elaboration can all be found in the seperate file
+COMPILE.md.
 
 ## Enjoy ^_^
