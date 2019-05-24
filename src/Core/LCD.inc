@@ -150,37 +150,18 @@ endm
 ; 1 is VBlank - Safe to do just about any changes anywhere
 ; 2 is OAM Busy, VBlank Free
 ; 3 is OAM Busy, VBlank Busy 
-; 4 is LCD Off (Only on non-compact version)
-; Skips lcd power check
-which_vmode_compact:    macro
+which_vmode:    macro
     ld a, [rSTAT]
     and STATF_MODE_MASK
 endm
 
-which_vmode:        macro
-    is_lcd_on
-    jr z, .endLCDOff\@ ; End in VBlank if it is
-
-    which_vmode_compact
-    jr .end\@ ; Otherwise whatever mode LCD reports
-
-.endLCDOff\@
-    ld a, 4
-
-.end\@
-endm
-
 ; Is the VRAM and OAM Free
 is_vfree:       macro
-    is_lcd_on
-    jr z, .endTrue\@ ; Stop here if the LCD is off
-
     which_vmode
     cp 0
     jr z, .endTrue\@
     cp 1
     jr z, .endTrue\@ ; VRAM and OAM are free only in VBlank or HBlank
-
     jr .endFalse\@
 
 .endTrue\@
@@ -189,7 +170,6 @@ is_vfree:       macro
 
 .endFalse\@
     ld a, FALSE
-
 .end\@
 endm
 
@@ -199,24 +179,28 @@ wait_vblank:        macro
     which_vmode
     cp 1
     jr z, .end\@
-    cp 4
-    jr z, .end\@
     halt
     jr .loop\@
-
 .end\@
 endm
 
-; Wait for VBlank period when interrupts are disabled
-wait_vblank_di:        macro
+; Wait for VBlank period
+poll_vblank:        macro
 .loop\@
     which_vmode
     cp 1
     jr z, .end\@
-    cp 4
+    jr .loop\@
+.end\@
+endm
+
+; Polling Wait for VBlank period
+poll_vblank_start:        macro
+.loop\@
+    ld a, [rLY]
+    cp 145
     jr z, .end\@
     jr .loop\@
-
 .end\@
 endm
 
@@ -226,24 +210,65 @@ wait_hblank:        macro
     which_vmode
     cp 0
     jr z, .end\@
-    cp 4
-    jr z, .end\@
     halt
     jr .loop\@
-
 .end\@
 endm
 
-; Wait for HBlank period when interrupts are disabled
-wait_hblank_di:        macro
+; Poll for HBlank period
+poll_hblank:        macro
 .loop\@
     which_vmode
     cp 0
     jr z, .end\@
-    cp 4
+    jr .loop\@
+.end\@
+endm
+
+; Wait for VRAM being free in some way
+wait_vram_free:        macro
+.loop\@
+    which_vmode
+    cp 0
+    jr z, .end\@
+    cp 1
+    jr z, .end\@
+    cp 2
+    jr z, .end\@
+    halt
+    jr .loop\@
+.end\@
+endm
+
+; Poll for VRAM being free in some way
+poll_vram_free:        macro
+.loop\@
+    which_vmode
+    cp 3
+    jr z, .loop\@
+.end\@
+endm
+
+wait_oam_free:        macro
+.loop\@
+    which_vmode
+    cp 0
+    jr z, .end\@
+    cp 1
+    jr z, .end\@
+    halt
+    jr .loop\@
+.end\@
+endm
+
+poll_oam_free:        macro
+.loop\@
+    which_vmode
+    cp 0
+    jr z, .end\@
+    cp 1
     jr z, .end\@
     jr .loop\@
-
 .end\@
 endm
 
@@ -256,12 +281,12 @@ wait:       macro
     endc
 endm
 
-; Waits for "vblank" or "hblank" when interrupts are disabled or not setup properly
-wait_di:       macro
+; Waits for "vblank" or "hblank"
+poll:       macro
     if \1 == "vblank"
-        wait_vblank_di
+        poll_vblank
     elif \1 == "hblank"
-        wait_hblank_di
+        poll_hblank
     endc
 endm
 

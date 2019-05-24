@@ -140,7 +140,8 @@ Start::
 
     ; Wait for a VBlank meaning all memory is open
     ; Since interupts are disabled this is a polling wait
-    wait_di "vblank"
+    ; We want to specifically wait until the start of vblank
+    poll_vblank_start
 
     ; Disable LCD Screen
     ; This ensures everything remains uninterupted
