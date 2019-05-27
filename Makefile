@@ -83,6 +83,13 @@ OBJ_FILES := Core/Banks/Banks.obj \
              Structure/WRAM.obj
 OBJ_FILES := $(addprefix $(BUILD_DIR)/,$(OBJ_FILES))
 
+# dependency files to be created by the assembler
+# not currently used due to the way files are include'd currently
+# NOTE: this actually stalls the build due to repeated includes, some .d files
+# end up being ~200 lines long due to no guards on src/Includes.inc and a
+# possible bug with RGBASM (duplicate entries)
+#OBJ_DEPS := $(OBJ_FILES:.obj=.d)
+
 # get a list of all directories that will need to be created when building
 # patsubst removes the trailing slash
 # (for some reason if this was left in, make would always remake the directories)
@@ -102,6 +109,8 @@ define ASSEMBLE_RULE
 	@echo "ASM      $@"
 	@$(RGBASM) $(ASM_FLAGS) -o $@ $<
 endef
+#	@$(RGBASM) $(ASM_FLAGS) -M $(BUILD_DIR)/$*.d -o $@ $<
+
 
 #
 # Pattern rule for assembly source to an object file
@@ -156,3 +165,8 @@ clean:
 #
 $(BUILD_DIR)/Data/Tilesets/Font/Font.tileset.obj: $(BUILD_DIR)/Data/Tilesets/Font/Font.tileset.png.2bpp
 
+#
+# assembler-generated dependency files
+# NOT USED
+#
+#-include $(OBJ_DEPS)
