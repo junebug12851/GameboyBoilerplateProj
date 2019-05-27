@@ -63,6 +63,13 @@ OBJ_FILES := Core/Banks/Banks.obj \
              Structure/WRAM.obj
 OBJ_FILES := $(addprefix $(BUILD_DIR)/,$(OBJ_FILES))
 
+# get a list of all directories that will need to be created when building
+# patsubst removes the trailing slash
+# (for some reason if this was left in, make would always remake the directories)
+# sort is used to remove duplicates
+OBJ_DIRS := $(patsubst %/,%,$(sort $(dir $(OBJ_FILES))))
+
+
 # -----------------------------------------------------------------------------
 # RULES
 
@@ -70,26 +77,6 @@ OBJ_FILES := $(addprefix $(BUILD_DIR)/,$(OBJ_FILES))
 # default target is the ROM file
 #
 all: $(ROM_GB)
-
-# =============================================================================
-# Rule for automatically creating directories in the build dir
-#
-# To use: add $(MARKER) as a dependency to a target so that make will create
-# the directory (if needed) that the target will reside in
-
-
-.SECONDEXPANSION:
-
-MARKER_FILE := .marker
-
-MARKER = $$(@D)/$(MARKER_FILE)
-
-%/$(MARKER_FILE):
-	@echo "MKDIR    $(dir $@)"
-	@mkdir -p $(dir $@)
-	@touch $@
-
-# =============================================================================
 
 #
 # Tile dependencies
@@ -99,14 +86,14 @@ $(BUILD_DIR)/Data/Tilesets/Font/Font.tileset.obj: $(BUILD_DIR)/Data/Tilesets/Fon
 #
 # Pattern rule for assembly source to an object file
 #
-$(BUILD_DIR)/%.obj: $(SRC_DIR)/%.asm $(MARKER)
+$(BUILD_DIR)/%.obj: $(SRC_DIR)/%.asm $(MAKEFILE_LIST)
 	@echo "ASM      $@"
 	@$(RGBASM) $(ASM_FLAGS) -o $@ $<
 
 #
 # Same as above except for *.z80 files
 #
-$(BUILD_DIR)/%.obj: $(SRC_DIR)/%.z80 $(MARKER)
+$(BUILD_DIR)/%.obj: $(SRC_DIR)/%.z80 $(MAKEFILE_LIST)
 	@echo "ASM      $@"
 	@$(RGBASM) $(ASM_FLAGS) -o $@ $<
 
@@ -114,15 +101,21 @@ $(BUILD_DIR)/%.obj: $(SRC_DIR)/%.z80 $(MARKER)
 # Pattern rule for png images to planar tile format
 # (Note: I removed the '-f' option from the build script)
 #
-$(BUILD_DIR)/%.png.2bpp: $(SRC_DIR)/%.png $(MARKER)
+$(BUILD_DIR)/%.png.2bpp: $(SRC_DIR)/%.png $(MAKEFILE_LIST)
 	@echo "GFX      $@"
 	@$(RGBGFX) -o $@ $<
 
-$(ROM_GB): $(OBJ_FILES)
+$(ROM_GB): $(OBJ_FILES) $(MAKEFILE_LIST)
 	@echo "LINK     $@"
-	@$(RGBLINK) $(LINK_FLAGS) -o $@ $+
+	@$(RGBLINK) $(LINK_FLAGS) -o $@ $(OBJ_FILES)
 	@echo "FIX      $@"
 	@$(RGBFIX) $(FIX_FLAGS) $@
+
+$(OBJ_FILES): | $(OBJ_DIRS)
+
+$(OBJ_DIRS):
+	@echo "MKDIR    $@"
+	@mkdir -p $@
 
 #
 # Clean will delete everything in the build directory except for:
@@ -135,4 +128,4 @@ clean:
 #
 # Keep these files for debugging
 #
-.PRECIOUS: $(ROM_MAP) $(ROM_SYM) %/$(MARKER_FILE)
+.PRECIOUS: $(ROM_MAP) $(ROM_SYM)
