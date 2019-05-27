@@ -17,15 +17,29 @@ SRAMSigEnd::
 ; A=TRUE if formatting was needed
 ; A=FALSE if not
 MBCRamAutoFormat::
-    mbc_select "ram", 0 ; Switch to RAM 0
+    ; Format Non-Persistent Data Banks
+    call MBCRamNPFormat
 
+    ; Determine if persistent data needs formatting or not
+    mbc_select "ram", 0 ; Switch to RAM 0
     verify SRAMSig, sSignature, SRAMSigEnd - SRAMSig ; Very signature matches
 
     cp TRUE
     jr nz, MBCRamFormat
 
-    ; External RAM doesn't need formatting
+    ; Persistent RAM Banks don't need formatting
     ld a, FALSE
+    ret
+
+; Format Non-Persistent Data banks
+; Non Persistent data banks are an extension of WRAM
+; They don't persist between power-cycles
+MBCRamNPFormat::
+    mbc_select "ram", 1
+    fill _SRAM, _SRAM_SIZE, 0
+    ld hl, sBank1No
+    ld a, 1
+    ld [hl], a
     ret
 
 ; Format Ram without checking if it needs formatting
@@ -36,11 +50,7 @@ MBCRamFormat::
     ld a, 0
     ld [hl], a
 
-    mbc_select "ram", 1
-    fill _SRAM, _SRAM_SIZE, 0
-    ld hl, sBank1No
-    ld a, 1
-    ld [hl], a
+    ; Ram Bank #1 is a non-persistent data bank
 
     mbc_select "ram", 2
     fill _SRAM, _SRAM_SIZE, 0

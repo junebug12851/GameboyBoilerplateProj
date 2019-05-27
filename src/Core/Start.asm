@@ -62,8 +62,8 @@ init_registers:     macro
     sprites "off"
     sprites "8x8"
 
-    ; Use tiledata 0 ($8000)
-    tiledata 0 
+    ; Use tiledata 1 (Dedicated to Window and BG) ($9000)
+    tiledata 1
 endm
 
 ; Wipe all memory and cartridge ram if needed and properly setup
@@ -124,8 +124,8 @@ init_memory:    macro
     ld a, TIMER_HOUR_TMA
     ld [wTimerH], a
 
-    ; Copy Font into Tile Data
-	copy FontTileset, vTileset1, FontTilesetEnd - FontTileset
+    ; Copy Font into Window & BG Tile Data
+	copy FontTileset, vTileset2, FontTilesetEnd - FontTileset
 endm
 
 ; Initial setup of the Gameboy

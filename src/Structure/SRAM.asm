@@ -11,9 +11,11 @@ sSignature::
 sVersion::
     ds 2
 
+; Bank #1 is a Non-Persistent Data Bank
 section "SRAM Bank 1 Setup", sram[$A000],bank[1]
 sBank1No::
     ds 1
+
 section "SRAM Bank 2 Setup", sram[$A000],bank[2]
 sBank2No::
     ds 1

@@ -198,7 +198,7 @@ endm
 poll_vblank_start:        macro
 .loop\@
     ld a, [rLY]
-    cp 145
+    cp 144
     jr z, .end\@
     jr .loop\@
 .end\@
