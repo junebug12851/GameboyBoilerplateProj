@@ -98,19 +98,22 @@ OBJ_DIRS := $(patsubst %/,%,$(sort $(dir $(OBJ_FILES))))
 #
 all: $(ROM_GB)
 
+define ASSEMBLE_RULE
+	@echo "ASM      $@"
+	@$(RGBASM) $(ASM_FLAGS) -o $@ $<
+endef
+
 #
 # Pattern rule for assembly source to an object file
 #
 $(BUILD_DIR)/%.obj: $(SRC_DIR)/%.asm $(MAKEFILE_LIST)
-	@echo "ASM      $@"
-	@$(RGBASM) $(ASM_FLAGS) -o $@ $<
+	$(ASSEMBLE_RULE)
 
 #
 # Same as above except for *.z80 files
 #
 $(BUILD_DIR)/%.obj: $(SRC_DIR)/%.z80 $(MAKEFILE_LIST)
-	@echo "ASM      $@"
-	@$(RGBASM) $(ASM_FLAGS) -o $@ $<
+	$(ASSEMBLE_RULE)
 
 #
 # Pattern rule for png images to planar tile format
