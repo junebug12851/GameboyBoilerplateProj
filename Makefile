@@ -2,16 +2,31 @@
 # Makefile for building the ROM, as an alternative to scripts/build.sh
 #
 
+#------------------------------------------------------------------------------
+# VARIABLES
+
 # some important paths (no trailing slash)
 BUILD_DIR := build
 SRC_DIR := src
 
-# name of the ROM file
-PROJECT_NAME := game
+#
+# ROM file name
+#
+ROM_NAME := game
 
-ROM_GB := $(BUILD_DIR)/$(PROJECT_NAME).gb
-ROM_MAP := $(BUILD_DIR)/$(PROJECT_NAME).map
-ROM_SYM := $(BUILD_DIR)/$(PROJECT_NAME).sym
+#
+# game ID string (must be 4 characters)
+#
+ROM_ID := PROJ
+
+#
+# game title (truncated to 16 characters)
+#
+ROM_TITLE := BOILERPLATEPROJ
+
+ROM_GB := $(BUILD_DIR)/$(ROM_NAME).gb
+ROM_MAP := $(BUILD_DIR)/$(ROM_NAME).map
+ROM_SYM := $(BUILD_DIR)/$(ROM_NAME).sym
 
 #
 # Variables for the RGB toolchain (just the command name if you have PATH set)
@@ -23,7 +38,12 @@ RGBGFX := rgbgfx
 
 ASM_FLAGS :=
 LINK_FLAGS := -d -p 0xFF -m $(ROM_MAP) -n $(ROM_SYM)
-FIX_FLAGS := -c -f lhg -i PROJ -j -k 00 -m 0x10 -n 0x00 -r 0x03 -t "BOILERPLATEPROJ" -p 0xFF
+FIX_FLAGS := -c -f lhg -i "$(ROM_ID)" -j -k 00 -m 0x10 -n 0x00 -r 0x03 -t "$(ROM_TITLE)" -p 0xFF
+
+# (optional) user-specific overrides
+# this can be used to specify the location of the RGBDS toolchain manually
+# or a different build directory can be used by overriding BUILD_DIR
+-include user.mk
 
 #
 # List of object files to build, when adding a new assembly file, add its
@@ -79,11 +99,6 @@ OBJ_DIRS := $(patsubst %/,%,$(sort $(dir $(OBJ_FILES))))
 all: $(ROM_GB)
 
 #
-# Tile dependencies
-#
-$(BUILD_DIR)/Data/Tilesets/Font/Font.tileset.obj: $(BUILD_DIR)/Data/Tilesets/Font/Font.tileset.png.2bpp
-
-#
 # Pattern rule for assembly source to an object file
 #
 $(BUILD_DIR)/%.obj: $(SRC_DIR)/%.asm $(MAKEFILE_LIST)
@@ -129,3 +144,12 @@ clean:
 # Keep these files for debugging
 #
 .PRECIOUS: $(ROM_MAP) $(ROM_SYM)
+
+# -----------------------------------------------------------------------------
+# EXTRA DEPENDENCIES
+
+#
+# Tile dependencies
+#
+$(BUILD_DIR)/Data/Tilesets/Font/Font.tileset.obj: $(BUILD_DIR)/Data/Tilesets/Font/Font.tileset.png.2bpp
+
