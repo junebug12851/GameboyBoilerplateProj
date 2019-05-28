@@ -1,7 +1,7 @@
 include "./src/Includes.inc"
 include "./src/General/Charmap.inc"
 
-section "ScreenBlank", romx,bank[1]
+section "ScreenBlank", romx
 
 ScreenBlank::
 db 126,126,126,126,125,125,125,125,125,125,125,125,125,124,124,124,124,124,124,124,GSTOP

@@ -6,9 +6,9 @@
 ;   Compression          : None.
 ;   Counter              : Tile-count as Byte.
 ;   Tile size            : 8 x 8
-;   Tiles                : 128
+;   Tiles                : 128 (Placed in 9000 Tileblock)
 
-section "FontTileset", rom0
+section "FontTileset", romx
 
 FontTilesetCount::
 db 128

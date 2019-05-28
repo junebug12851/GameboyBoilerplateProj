@@ -126,6 +126,9 @@ init_memory:    macro
 
     ; Copy Font into Window & BG Tile Data
 	copy FontTileset, vTileset2, FontTilesetEnd - FontTileset
+
+    ; Copy Hotel Tileset into Window & BG Tile Data
+	copy HotelTileset, vTilesetShared, HotelTilesetEnd - HotelTileset
 endm
 
 ; Initial setup of the Gameboy
