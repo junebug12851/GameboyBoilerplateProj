@@ -150,7 +150,7 @@ $(OBJ_DIRS):
 #    - $(BUILD_DIR) itself
 #
 clean:
-	find "$(BUILD_DIR)" \\! -name .gitkeep \\! -path $(BUILD_DIR) -delete
+	find "$(BUILD_DIR)" ! -name .gitkeep ! -path $(BUILD_DIR) -delete
 
 #
 # Keep these files for debugging
