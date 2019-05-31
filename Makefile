@@ -36,6 +36,11 @@ RGBLINK := rgblink
 RGBFIX := rgbfix
 RGBGFX := rgbgfx
 
+#
+# BGB emulator
+#
+BGB := bgb
+
 ASM_FLAGS :=
 LINK_FLAGS := -d -p 0xCB -m $(ROM_MAP) -n $(ROM_SYM)
 FIX_FLAGS := -C -f lhg -i "$(ROM_ID)" -j -k 00 -m 0x1B -n 0x02 -r 0x04 -t "$(ROM_TITLE)" -p 0xCB
@@ -153,6 +158,12 @@ $(OBJ_DIRS):
 #
 clean:
 	find "$(BUILD_DIR)" ! -name .gitkeep ! -path $(BUILD_DIR) -delete
+
+run: $(ROM_GB)
+	@echo "RUN      $(ROM_GB)"
+	@$(BGB) $(ROM_GB)
+
+.PHONY: all clean run
 
 #
 # Keep these files for debugging
