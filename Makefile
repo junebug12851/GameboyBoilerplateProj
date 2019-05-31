@@ -37,8 +37,8 @@ RGBFIX := rgbfix
 RGBGFX := rgbgfx
 
 ASM_FLAGS :=
-LINK_FLAGS := -d -p 0xFF -m $(ROM_MAP) -n $(ROM_SYM)
-FIX_FLAGS := -c -f lhg -i "$(ROM_ID)" -j -k 00 -m 0x10 -n 0x00 -r 0x03 -t "$(ROM_TITLE)" -p 0xFF
+LINK_FLAGS := -d -p 0xCB -m $(ROM_MAP) -n $(ROM_SYM)
+FIX_FLAGS := -C -f lhg -i "$(ROM_ID)" -j -k 00 -m 0x1B -n 0x02 -r 0x04 -t "$(ROM_TITLE)" -p 0xCB
 
 # (optional) user-specific overrides
 # this can be used to specify the location of the RGBDS toolchain manually
@@ -64,13 +64,15 @@ OBJ_FILES := Core/Banks/Banks.obj \
              Core/InterruptHandlers/VBlank.obj \
              Core/Joypad/Joypad.obj \
              Core/MBC/MBC.obj \
-             Core/Boot.obj \
+             Core/Memory/Memory.obj \
              Core/GameLoop.obj \
-             Core/Memory.obj \
              Core/RSTHandlers.obj \
              Core/Start.obj \
-             Data/Tilemaps/Main.tilemap.obj \
+             Data/Tilemaps/Blank/Blank.tilemap.obj \
+             Data/Tilemaps/Hotel/Hotel.tileset.obj \
+             Data/Tilemaps/Main/Main.tilemap.obj \
              Data/Tilesets/Font/Font.tileset.obj \
+             Data/Tilesets/Hotel/Hotel.tileset.obj \
              Data/StringTable.obj \
              Fixed/Entry.obj \
              Fixed/Header.obj \
@@ -164,6 +166,8 @@ clean:
 # Tile dependencies
 #
 $(BUILD_DIR)/Data/Tilesets/Font/Font.tileset.obj: $(BUILD_DIR)/Data/Tilesets/Font/Font.tileset.png.2bpp
+
+$(BUILD_DIR)/Data/Tilesets/Hotel/Hotel.tileset.obj: $(BUILD_DIR)/Data/Tilesets/Hotel/Hotel.tileset.png.2bpp
 
 #
 # assembler-generated dependency files
