@@ -82,3 +82,20 @@ target:
 ```sh
 make clean
 ```
+
+To test the ROM with the bgb emulator, use the utility run target:
+```sh
+make run  # NOTE: this will rebuild the rom if any changes have been made
+```
+
+## The `user.mk` file
+
+This file is not tracked by git and is to contain user-specific overrides for
+the makefile. The Makefile includes this file (if it exists) after the
+variables have been set. See the Makefile for possible variables to override.
+
+If your RGBDS toolchain is not in your PATH, you can specify the
+location of each tool manually in this file.
+
+You can also specify a different location for the build directory (BUILD_DIR).
+The directory must exist when building.
