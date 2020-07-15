@@ -50,45 +50,11 @@ FIX_FLAGS := -C -f lhg -i "$(ROM_ID)" -j -k 00 -m 0x1B -n 0x02 -r 0x04 -t "$(ROM
 # or a different build directory can be used by overriding BUILD_DIR
 -include user.mk
 
-#
-# List of object files to build, when adding a new assembly file, add its
-# object file here (preferably in alphabetical order).
-# Note: globbing could be used, but I do not recommend it for various reasons
-#       (speed, excluding files is a pain, etc)
-#
-OBJ_FILES := Core/Banks/Banks.obj \
-             Core/Data/Data.obj \
-             Core/DMA/DMA.obj \
-             Core/Graphics/Graphics.obj \
-             Core/InterruptHandlers/HBlank.obj \
-             Core/InterruptHandlers/Joypad.obj \
-             Core/InterruptHandlers/LCDC.obj \
-             Core/InterruptHandlers/LYC.obj \
-             Core/InterruptHandlers/Serial.obj \
-             Core/InterruptHandlers/Timer.obj \
-             Core/InterruptHandlers/VBlank.obj \
-             Core/Joypad/Joypad.obj \
-             Core/MBC/MBC.obj \
-             Core/Memory/Memory.obj \
-             Core/GameLoop.obj \
-             Core/RSTHandlers.obj \
-             Core/Start.obj \
-             Data/Tilemaps/Blank/Blank.tilemap.obj \
-             Data/Tilemaps/Hotel/Hotel.tileset.obj \
-             Data/Tilemaps/Main/Main.tilemap.obj \
-             Data/Tilesets/Font/Font.tileset.obj \
-             Data/Tilesets/Hotel/Hotel.tileset.obj \
-             Data/StringTable.obj \
-             Fixed/Entry.obj \
-             Fixed/Header.obj \
-             Fixed/Interrupts.obj \
-             Fixed/RST.obj \
-             Structure/HRAM.obj \
-             Structure/ROM.obj \
-             Structure/SRAM.obj \
-             Structure/VRAM.obj \
-             Structure/WRAM.obj
-OBJ_FILES := $(addprefix $(BUILD_DIR)/,$(OBJ_FILES))
+# Find the source files to build
+SRC_FILES := $(shell find $(SRC_DIR) -name "*.asm" -or -name "*.z80")
+OBJ_FILES := $(patsubst $(SRC_DIR)/%.asm,$(BUILD_DIR)/%.obj,$(SRC_FILES))
+
+TILES := $(patsubst $(SRC_DIR)/%.png,$(BUILD_DIR)/%.png.2bpp,$(shell find $(SRC_DIR) -name "*.png"))
 
 # dependency files to be created by the assembler
 # not currently used due to the way files are include'd currently
@@ -118,17 +84,16 @@ define ASSEMBLE_RULE
 endef
 #	@$(RGBASM) $(ASM_FLAGS) -M $(BUILD_DIR)/$*.d -o $@ $<
 
-
 #
 # Pattern rule for assembly source to an object file
 #
-$(BUILD_DIR)/%.obj: $(SRC_DIR)/%.asm $(MAKEFILE_LIST)
+$(BUILD_DIR)/%.obj: $(SRC_DIR)/%.asm $(TILES) $(MAKEFILE_LIST)
 	$(ASSEMBLE_RULE)
 
 #
 # Same as above except for *.z80 files
 #
-$(BUILD_DIR)/%.obj: $(SRC_DIR)/%.z80 $(MAKEFILE_LIST)
+$(BUILD_DIR)/%.obj: $(SRC_DIR)/%.z80 $(TILES) $(MAKEFILE_LIST)
 	$(ASSEMBLE_RULE)
 
 #
@@ -168,7 +133,7 @@ run: $(ROM_GB)
 #
 # Keep these files for debugging
 #
-.PRECIOUS: $(ROM_MAP) $(ROM_SYM)
+.PRECIOUS: $(ROM_MAP) $(ROM_SYM) $(TILES)
 
 # -----------------------------------------------------------------------------
 # EXTRA DEPENDENCIES
@@ -176,9 +141,9 @@ run: $(ROM_GB)
 #
 # Tile dependencies
 #
-$(BUILD_DIR)/Data/Tilesets/Font/Font.tileset.obj: $(BUILD_DIR)/Data/Tilesets/Font/Font.tileset.png.2bpp
+#$(BUILD_DIR)/Data/Tilesets/Font/Font.tileset.obj: $(BUILD_DIR)/Data/Tilesets/Font/Font.tileset.png.2bpp
 
-$(BUILD_DIR)/Data/Tilesets/Hotel/Hotel.tileset.obj: $(BUILD_DIR)/Data/Tilesets/Hotel/Hotel.tileset.png.2bpp
+#$(BUILD_DIR)/Data/Tilesets/Hotel/Hotel.tileset.obj: $(BUILD_DIR)/Data/Tilesets/Hotel/Hotel.tileset.png.2bpp
 
 #
 # assembler-generated dependency files
