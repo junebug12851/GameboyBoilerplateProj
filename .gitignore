@@ -4,3 +4,4 @@ scripts/buildRun.sh
 build/*
 
 !build/.gitkeep
+user.mk
